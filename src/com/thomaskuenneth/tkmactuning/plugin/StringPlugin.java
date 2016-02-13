@@ -28,7 +28,7 @@ package com.thomaskuenneth.tkmactuning.plugin;
  */
 public class StringPlugin extends AbstractPlugin<String> {
 
-    private String value = "";
+    private String value;
 
     public StringPlugin(String plugin) {
         super(plugin);
@@ -46,9 +46,7 @@ public class StringPlugin extends AbstractPlugin<String> {
 
     @Override
     public final void setValue(String value) {
-        String old = this.value;
         this.value = value;
-        pcs.firePropertyChange("value", old, value);
     }
 
     @Override

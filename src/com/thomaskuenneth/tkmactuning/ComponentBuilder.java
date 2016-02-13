@@ -21,8 +21,13 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
+import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
@@ -32,21 +37,33 @@ import javax.swing.JTextField;
  */
 public class ComponentBuilder {
 
-    public static final String PLUGIN = "plugin";
+    private static final List<IFPlugin> L = new ArrayList<>();
 
     public static JComponent createComponent(AbstractPlugin plugin) {
-        JComponent result = null;
         Class type = plugin.getType();
         if (Boolean.class.equals(type)) {
-            result = new JCheckBox(plugin.getShortDescription());
+            JCheckBox cb = new JCheckBox(plugin.getShortDescription());
+            configure(plugin, cb);
+            return cb;
         } else if (String.class.equals(type)) {
-            result = new JTextField();
-            result.setToolTipText(plugin.getShortDescription());
+            JTextField tf = new JTextField(40);
+            configure(plugin, tf);
+            JPanel p = new JPanel();
+            p.add(new JLabel(plugin.getShortDescription()));
+            p.add(tf);
+            return p;
         }
-        if (result != null) {
-            PluginComponentConnector.connect(plugin, result);
-            result.putClientProperty(PLUGIN, plugin);
+        return null;
+    }
+
+    private static void configure(AbstractPlugin plugin, JComponent c) {
+        PluginComponentConnector.connect(plugin, c);
+        L.add(plugin);
+    }
+
+    public static void save() {
+        for (IFPlugin plugin : L) {
+            plugin.writeValue();
         }
-        return result;
     }
 }

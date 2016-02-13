@@ -20,48 +20,21 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import org.jdesktop.application.Application;
 
 /**
- * This abstract class provides access to values stored in the Mac OS X Defaults
- * database. They are defined by a domain and a key.<p>
- * The class has builtin support for bound properties through
- * <code>addPropertyChangeListener()</code> and
- * <code>removePropertyChangeListener()</code>. Subclasses must invoke
- * <code>firePropertyChange()</code> of the <code>pcs</code> instance variable.
+ * This is an abstract base class for plugins.
  *
  * @author Thomas Kuenneth
- * @param <T> the type of the value being handled by the pluginName
+ * @param <T> the type of the value being handled by the plugin
  */
 public abstract class AbstractPlugin<T> implements IFPlugin<T> {
 
     private final String pluginName;
-    protected final PropertyChangeSupport pcs;
 
     public AbstractPlugin(String pluginName) {
         this.pluginName = pluginName;
-        pcs = new PropertyChangeSupport(this);
         readValue();
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(l);
-    }
-
-    public void addPropertyChangeListener(String propName,
-            PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(propName, l);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener l) {
-        pcs.removePropertyChangeListener(l);
-    }
-
-    public void removePropertyChangeListener(String propName,
-            PropertyChangeListener l) {
-        pcs.removePropertyChangeListener(propName, l);
     }
 
     @Override

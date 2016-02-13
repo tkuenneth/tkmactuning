@@ -21,9 +21,7 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin;
-import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.StringPlugin;
-import java.awt.Component;
 import java.util.EventObject;
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -31,8 +29,8 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
 /**
- * This is the main class of TKMacTuning. It acts as the entry point
- * of the program. The gui is created and shown here.
+ * This is the main class of TKMacTuning. It acts as the entry point of the
+ * program. The gui is created and shown here.
  *
  * @author Thomas Kuenneth
  */
@@ -49,17 +47,10 @@ public class TKMacTuning extends SingleFrameApplication implements Application.E
         add(ComponentBuilder.createComponent(new StringPlugin("LoginScreenPicture")));
         show(b);
     }
-    
-    private void add(JComponent c) {
-        if (c != null) {
-            b.add(c);
-        }
-    }
-    
 
     /**
      * Initiates the startup sequence.
-     * 
+     *
      * @param args arguments from the command line
      */
     public static void main(String[] args) {
@@ -73,14 +64,12 @@ public class TKMacTuning extends SingleFrameApplication implements Application.E
 
     @Override
     public void willExit(EventObject arg0) {
-        for (Component c : b.getComponents()) {
-            if (c instanceof JComponent) {
-                JComponent cc = (JComponent) c;
-                IFPlugin p = (IFPlugin) cc.getClientProperty(ComponentBuilder.PLUGIN);
-                if (p != null) {
-                    p.writeValue();
-                }
-            }
+        ComponentBuilder.save();
+    }
+
+    private void add(JComponent c) {
+        if (c != null) {
+            b.add(c);
         }
     }
 }
