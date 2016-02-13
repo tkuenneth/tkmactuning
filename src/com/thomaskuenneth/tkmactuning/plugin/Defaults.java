@@ -1,8 +1,24 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Defaults.java
+ *
+ * Copyright 2008 - 2016 Thomas Kuenneth
+ *
+ * This file is part of TKMacTuning.
+ *
+ * TKMacTuning is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2
+ * as published by the Free Software Foundation
+ *
+ * TKMacTuning is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TKMacTuning; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-package com.thomaskuenneth.tkmactuning;
+package com.thomaskuenneth.tkmactuning.plugin;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,10 +27,12 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author thomas
+ * @author Thomas Kuenneth
  */
 public final class Defaults {
 
+    private static final Logger LOGGER = Logger.getLogger(Defaults.class.getName());
+    
     private static final String CMD = "/usr/bin/defaults";
 
     private Defaults() {
@@ -27,6 +45,10 @@ public final class Defaults {
         }
         return Boolean.FALSE;
     }
+    
+    public static String readString(String domain, String key) {
+        return read(domain, key);
+    }
 
     private static String read(String domain, String key) {
         String result = "";
@@ -36,6 +58,7 @@ public final class Defaults {
         if (start(pb, sbIS, sbES) == 0) {
             result = sbIS.toString().trim();
         }
+        LOGGER.log(Level.INFO, "domain={0}, key={1} -> {2}", new Object[]{domain, key, result});
         return result;
     }
 
@@ -52,11 +75,11 @@ public final class Defaults {
         try {
             Process process = pb.start();
             process.waitFor();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Defaults.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Defaults.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException | IOException ex) {
+            LOGGER.log(Level.SEVERE, "exception while writing", ex);
         }
+        LOGGER.log(Level.INFO, "domain={0}, key={1}, type={2}, value={3}", 
+                new Object[]{domain, key, type, value});
     }
 
     private static int start(ProcessBuilder pb, StringBuilder sbIS, StringBuilder sbES) {
@@ -85,6 +108,7 @@ public final class Defaults {
                 }
             }
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "exception while reading", e);
         }
         return exit;
     }

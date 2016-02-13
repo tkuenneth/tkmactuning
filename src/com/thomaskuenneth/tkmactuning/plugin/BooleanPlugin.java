@@ -1,7 +1,7 @@
 /*
  * BooleanPlugin.java
  *
- * Copyright 2008 Thomas Kuenneth
+ * Copyright 2008 - 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -20,43 +20,44 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
-import com.thomaskuenneth.tkmactuning.Defaults;
-
 /**
- * This plugin provides access to boolean values in the Mac OS X
- * Defaults database.
+ * This plugin provides access to boolean values in the Mac OS X Defaults
+ * database.
  *
  * @author Thomas Kuenneth
  */
-public abstract class BooleanPlugin extends AbstractPlugin<Boolean> {
+public class BooleanPlugin extends AbstractPlugin<Boolean> {
 
-    private Boolean value = null;
+    private Boolean value = Boolean.FALSE;
 
-    public BooleanPlugin(Class clazz) {
-        super(clazz);
-        readValue();
+    public BooleanPlugin(String pluginName) {
+        super(pluginName);
     }
 
+    @Override
     public final Class<Boolean> getType() {
         return Boolean.class;
     }
 
+    @Override
     public final Boolean getValue() {
         return value;
     }
 
+    @Override
     public final void setValue(Boolean value) {
         Boolean old = this.value;
-        this.value = (Boolean) value;
-        System.err.println(getShortDescription() + ": " + value);
+        this.value = value;
         pcs.firePropertyChange("value", old, value);
     }
 
+    @Override
     public final void readValue() {
-        setValue(Defaults.readBoolean(getDomain(), getKey()));
+        setValue(Defaults.readBoolean(getPrimaryCategory(), getSecondaryCategory()));
     }
 
+    @Override
     public final void writeValue() {
-        Defaults.write(getDomain(), getKey(), getValue());
+        Defaults.write(getPrimaryCategory(), getSecondaryCategory(), getValue());
     }
 }

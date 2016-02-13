@@ -1,7 +1,7 @@
 /*
  * TKMacTuning.java
  *
- * Copyright 2008 Thomas Kuenneth
+ * Copyright 2008 - 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -20,9 +20,9 @@
  */
 package com.thomaskuenneth.tkmactuning;
 
-import com.thomaskuenneth.tkmactuning.plugin.FXListViewStripes;
+import com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
-import com.thomaskuenneth.tkmactuning.plugin.IncludeDebugMenu;
+import com.thomaskuenneth.tkmactuning.plugin.StringPlugin;
 import java.awt.Component;
 import java.util.EventObject;
 import javax.swing.Box;
@@ -44,10 +44,18 @@ public class TKMacTuning extends SingleFrameApplication implements Application.E
     protected void startup() {
         addExitListener(this);
         b = Box.createVerticalBox();
-        b.add(ComponentBuilder.createComponent(new FXListViewStripes()));
-        b.add(ComponentBuilder.createComponent(new IncludeDebugMenu()));
+        add(ComponentBuilder.createComponent(new BooleanPlugin("FXListViewStripes")));
+        add(ComponentBuilder.createComponent(new BooleanPlugin("IncludeDebugMenu")));
+        add(ComponentBuilder.createComponent(new StringPlugin("LoginScreenPicture")));
         show(b);
     }
+    
+    private void add(JComponent c) {
+        if (c != null) {
+            b.add(c);
+        }
+    }
+    
 
     /**
      * Initiates the startup sequence.
@@ -58,20 +66,21 @@ public class TKMacTuning extends SingleFrameApplication implements Application.E
         Application.launch(TKMacTuning.class, args);
     }
 
+    @Override
     public boolean canExit(EventObject arg0) {
         return true;
     }
 
+    @Override
     public void willExit(EventObject arg0) {
         for (Component c : b.getComponents()) {
             if (c instanceof JComponent) {
                 JComponent cc = (JComponent) c;
-                IFPlugin p = (IFPlugin) cc.getClientProperty("plugin");
+                IFPlugin p = (IFPlugin) cc.getClientProperty(ComponentBuilder.PLUGIN);
                 if (p != null) {
                     p.writeValue();
                 }
             }
         }
-
     }
 }

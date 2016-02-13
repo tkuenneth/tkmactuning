@@ -1,7 +1,7 @@
 /*
  * AbstractPlugin.java
  *
- * Copyright 2008 Thomas Kuenneth
+ * Copyright 2008 - 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -23,31 +23,27 @@ package com.thomaskuenneth.tkmactuning.plugin;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ResourceMap;
 
 /**
- * This abstract class provides access to values stored in the Mac OS X
- * Defaults database. The are defined by a domain and a key.<p>
+ * This abstract class provides access to values stored in the Mac OS X Defaults
+ * database. They are defined by a domain and a key.<p>
  * The class has builtin support for bound properties through
- * <code>addPropertyChangeListener()</code> and 
- * <code>removePropertyChangeListener()</code>.
- * Subclasses must invoke <code>firePropertyChange()</code> of
- * the <code>pcs</code> instance variable.
- * 
+ * <code>addPropertyChangeListener()</code> and
+ * <code>removePropertyChangeListener()</code>. Subclasses must invoke
+ * <code>firePropertyChange()</code> of the <code>pcs</code> instance variable.
+ *
  * @author Thomas Kuenneth
+ * @param <T> the type of the value being handled by the pluginName
  */
 public abstract class AbstractPlugin<T> implements IFPlugin<T> {
 
-    private ResourceMap resourceMap;
-    protected PropertyChangeSupport pcs;
+    private final String pluginName;
+    protected final PropertyChangeSupport pcs;
 
-    protected AbstractPlugin() {
-        this(AbstractPlugin.class);
-    }
-
-    protected AbstractPlugin(Class clazz) {
-        resourceMap = Application.getInstance().getContext().getResourceMap(clazz);
+    public AbstractPlugin(String pluginName) {
+        this.pluginName = pluginName;
         pcs = new PropertyChangeSupport(this);
+        readValue();
     }
 
     public void addPropertyChangeListener(PropertyChangeListener l) {
@@ -67,36 +63,34 @@ public abstract class AbstractPlugin<T> implements IFPlugin<T> {
             PropertyChangeListener l) {
         pcs.removePropertyChangeListener(propName, l);
     }
-    
-    public final String getString(String key) {
-        return resourceMap.getString(key);
-    }
 
-    protected final String getDomain() {
-        return getString("domain");
-    }
-
-    protected final String getKey() {
-        return getString("key");
-    }
-
+    @Override
     public final String getShortDescription() {
         return getString("shortDescription");
     }
 
+    @Override
     public final String getLongDescription() {
         return getString("longDescription");
     }
 
+    @Override
     public final String getApplicationName() {
         return getString("applicationName");
     }
 
+    @Override
     public final String getPrimaryCategory() {
         return getString("primaryCategory");
     }
 
+    @Override
     public final String getSecondaryCategory() {
         return getString("secondaryCategory");
+    }
+
+    private String getString(String key) {
+        return Application.getInstance().
+                getContext().getResourceMap().getString(pluginName + "." + key);
     }
 }

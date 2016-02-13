@@ -1,7 +1,7 @@
 /*
  * PluginComponentConnector.java
  *
- * Copyright 2008 Thomas Kuenneth
+ * Copyright 2008 - 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -31,8 +31,7 @@ import org.jdesktop.beansbinding.Property;
 
 /**
  * This class connects plugins to components. It binds the Swing components to
- * the <em>value</em> property of <code>AbstractPlugin</code> and its
- * children.
+ * the <em>value</em> property of <code>AbstractPlugin</code> and its children.
  *
  * @author Thomas Kuenneth
  */
@@ -44,6 +43,7 @@ public class PluginComponentConnector {
             Property selected = BeanProperty.create("selected");
             Binding b = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, plugin, value, component, selected);
             b.bind();
+            b.refresh();
         }
     }
 }

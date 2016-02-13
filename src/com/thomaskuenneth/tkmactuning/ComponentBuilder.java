@@ -1,7 +1,7 @@
 /*
  * ComponentBuilder.java
  *
- * Copyright 2008 Thomas Kuenneth
+ * Copyright 2008 - 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -23,6 +23,7 @@ package com.thomaskuenneth.tkmactuning;
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JTextField;
 
 /**
  * This class is used to create components for plugins.
@@ -31,15 +32,20 @@ import javax.swing.JComponent;
  */
 public class ComponentBuilder {
 
+    public static final String PLUGIN = "plugin";
+
     public static JComponent createComponent(AbstractPlugin plugin) {
         JComponent result = null;
         Class type = plugin.getType();
         if (Boolean.class.equals(type)) {
             result = new JCheckBox(plugin.getShortDescription());
-            PluginComponentConnector.connect(plugin, result);
+        } else if (String.class.equals(type)) {
+            result = new JTextField();
+            result.setToolTipText(plugin.getShortDescription());
         }
         if (result != null) {
-            result.putClientProperty("plugin", plugin);
+            PluginComponentConnector.connect(plugin, result);
+            result.putClientProperty(PLUGIN, plugin);
         }
         return result;
     }

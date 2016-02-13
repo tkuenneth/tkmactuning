@@ -1,7 +1,7 @@
 /*
  * StringPlugin.java
  *
- * Copyright 2008 Thomas Kuenneth
+ * Copyright 2008 - 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -20,43 +20,44 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
-import com.thomaskuenneth.tkmactuning.Defaults;
-
 /**
- * This plugin provides access to string values in the Mac OS X
- * Defaults database.
+ * This plugin provides access to string values in the Mac OS X Defaults
+ * database.
  *
  * @author Thomas Kuenneth
  */
-public abstract class StringPlugin extends AbstractPlugin<String> {
+public class StringPlugin extends AbstractPlugin<String> {
 
-    private String value = null;
+    private String value = "";
 
-    public StringPlugin(Class clazz) {
-        super(clazz);
-        readValue();
+    public StringPlugin(String plugin) {
+        super(plugin);
     }
 
+    @Override
     public final Class<String> getType() {
         return String.class;
     }
 
+    @Override
     public final String getValue() {
         return value;
     }
 
+    @Override
     public final void setValue(String value) {
         String old = this.value;
         this.value = value;
-        System.err.println(getShortDescription() + ": " + value);
         pcs.firePropertyChange("value", old, value);
     }
 
+    @Override
     public final void readValue() {
-//        setValue(Defaults.readBoolean(getDomain(), getKey()));
+        setValue(Defaults.readString(getPrimaryCategory(), getSecondaryCategory()));
     }
 
+    @Override
     public final void writeValue() {
-        Defaults.write(getDomain(), getKey(), getValue());
+        Defaults.write(getPrimaryCategory(), getSecondaryCategory(), getValue());
     }
 }

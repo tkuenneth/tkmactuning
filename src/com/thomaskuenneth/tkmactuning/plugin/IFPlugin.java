@@ -1,7 +1,7 @@
 /*
  * IFPlugin.java
  *
- * Copyright 2008 Thomas Kuenneth
+ * Copyright 2008 - 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -29,6 +29,7 @@ package com.thomaskuenneth.tkmactuning.plugin;
  * stored externally with <code>writeValue()</code>.
  *
  * @author Thomas Kuenneth
+ * @param <T> the type of the value being handled by the plugin
  */
 public interface IFPlugin<T> {
 
