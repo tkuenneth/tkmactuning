@@ -42,9 +42,7 @@ public class TKMacTuning extends SingleFrameApplication implements Application.E
     protected void startup() {
         addExitListener(this);
         b = Box.createVerticalBox();
-        add(ComponentBuilder.createComponent(new BooleanPlugin("FXListViewStripes")));
-        add(ComponentBuilder.createComponent(new BooleanPlugin("IncludeDebugMenu")));
-        add(ComponentBuilder.createComponent(new StringPlugin("LoginScreenPicture")));
+        add(ComponentBuilder.createComponent(new BooleanPlugin("disable-shadow")));
         show(b);
     }
 

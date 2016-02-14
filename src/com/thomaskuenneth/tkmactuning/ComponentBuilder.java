@@ -21,8 +21,10 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
+import com.thomaskuenneth.tkmactuning.plugin.Defaults;
 import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -62,8 +64,16 @@ public class ComponentBuilder {
     }
 
     public static void save() {
+        HashMap<String, Boolean> map = new HashMap<>();
         for (IFPlugin plugin : L) {
+            String applicationName = plugin.getApplicationName();
+            if (!map.containsKey(applicationName)) {
+                map.put(applicationName, true);
+            }
             plugin.writeValue();
+        }
+        for (String applicationName : map.keySet()) {
+            Defaults.killall(applicationName);
         }
     }
 }

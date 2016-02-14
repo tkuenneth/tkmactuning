@@ -26,26 +26,36 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * This class provides read and write access to the Mac OS X Defaults database.
  *
  * @author Thomas Kuenneth
  */
 public final class Defaults {
 
     private static final Logger LOGGER = Logger.getLogger(Defaults.class.getName());
-    
+
     private static final String CMD = "/usr/bin/defaults";
+    private static final String CMD_KILLALL = "/usr/bin/killall";
 
     private Defaults() {
     }
 
+    public static void killall(String applicationName) {
+        StringBuilder sbIS = new StringBuilder();
+        StringBuilder sbES = new StringBuilder();
+        ProcessBuilder pb = new ProcessBuilder(CMD_KILLALL, applicationName);
+        int result = start(pb, sbIS, sbES);
+        LOGGER.log(Level.INFO, "appName={0} -> {1}", new Object[]{applicationName, result});
+    }
+
     public static Boolean readBoolean(String domain, String key) {
         String result = read(domain, key);
-        if ("1".equals(result)) {
+        if (("1".equals(result)) || ("true".equalsIgnoreCase(result))) {
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
     }
-    
+
     public static String readString(String domain, String key) {
         return read(domain, key);
     }
@@ -78,7 +88,7 @@ public final class Defaults {
         } catch (InterruptedException | IOException ex) {
             LOGGER.log(Level.SEVERE, "exception while writing", ex);
         }
-        LOGGER.log(Level.INFO, "domain={0}, key={1}, type={2}, value={3}", 
+        LOGGER.log(Level.INFO, "domain={0}, key={1}, type={2}, value={3}",
                 new Object[]{domain, key, type, value});
     }
 
@@ -104,6 +114,7 @@ public final class Defaults {
                         exit = p.exitValue();
                         break;
                     } catch (IllegalThreadStateException e) {
+                        // no logging needed... just waiting
                     }
                 }
             }
