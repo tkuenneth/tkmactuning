@@ -21,35 +21,23 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.Property;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Control;
 
 /**
- * This class connects plugins to components. It binds the Swing components to
- * the <em>value</em> property of <code>AbstractPlugin</code> and its children.
+ * This class connects plugins to controls.
  *
  * @author Thomas Kuenneth
  */
 public class PluginComponentConnector {
 
-    public static void connect(AbstractPlugin plugin, JComponent component) {
-        Property value = BeanProperty.create("value");
-        Property p = null;
-        if (component instanceof JCheckBox) {
-            p = BeanProperty.create("selected");
-        } else if (component instanceof JTextField) {
-            p = BeanProperty.create("text");
-        }
-        if (p != null) {
-            Binding b = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE,
-                    plugin, value, component, p);
-            b.bind();
+    public static void connect(final AbstractPlugin plugin, Control control) {
+        if (control instanceof CheckBox) {
+            final CheckBox cb = ((CheckBox) control);
+            cb.setSelected((boolean) plugin.getValue());
+            cb.setOnAction((event) -> {
+                plugin.setValue(cb.isSelected());
+            });
         }
     }
 }

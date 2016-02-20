@@ -20,7 +20,7 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
-import org.jdesktop.application.Application;
+import com.thomaskuenneth.tkmactuning.TKMacTuning;
 
 /**
  * This is an abstract base class for plugins.
@@ -63,7 +63,6 @@ public abstract class AbstractPlugin<T> implements IFPlugin<T> {
     }
 
     private String getString(String key) {
-        return Application.getInstance().
-                getContext().getResourceMap().getString(pluginName + "." + key);
+        return TKMacTuning.getString(pluginName + "." + key);
     }
 }

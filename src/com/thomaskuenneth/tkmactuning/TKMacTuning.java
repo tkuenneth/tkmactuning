@@ -21,29 +21,50 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin;
-import com.thomaskuenneth.tkmactuning.plugin.StringPlugin;
-import java.util.EventObject;
-import javax.swing.Box;
-import javax.swing.JComponent;
-import org.jdesktop.application.Application;
-import org.jdesktop.application.SingleFrameApplication;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
- * This is the main class of TKMacTuning. It acts as the entry point of the
- * program. The gui is created and shown here.
+ * This is the main class of TKMacTuning.
  *
  * @author Thomas Kuenneth
  */
-public class TKMacTuning extends SingleFrameApplication implements Application.ExitListener {
+public class TKMacTuning extends Application {
 
-    private Box b;
+    private static final Logger LOGGER = Logger.getLogger(TKMacTuning.class.getName());
+    private static final TKMacTuning INSTANCE = new TKMacTuning();
+
+    private final Properties p;
+
+    public TKMacTuning() {
+        p = new Properties();
+        try {
+            p.load(getClass().getResourceAsStream("resources/TKMacTuning.properties"));
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "loading properties file failed", ex);
+        }
+    }
 
     @Override
-    protected void startup() {
-        addExitListener(this);
-        b = Box.createVerticalBox();
-        add(ComponentBuilder.createComponent(new BooleanPlugin("disable-shadow")));
-        show(b);
+    public void start(Stage primaryStage) {
+        VBox root = new VBox();
+        root.getChildren().
+                add(ComponentBuilder.createComponent(new BooleanPlugin("disable-shadow")));
+        root.getChildren().
+                add(ComponentBuilder.createComponent(new BooleanPlugin("AppleShowAllFiles")));
+        primaryStage.setScene(new Scene(root, 300, 250));
+        primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        ComponentBuilder.save();
     }
 
     /**
@@ -52,22 +73,10 @@ public class TKMacTuning extends SingleFrameApplication implements Application.E
      * @param args arguments from the command line
      */
     public static void main(String[] args) {
-        Application.launch(TKMacTuning.class, args);
+        launch(args);
     }
 
-    @Override
-    public boolean canExit(EventObject arg0) {
-        return true;
-    }
-
-    @Override
-    public void willExit(EventObject arg0) {
-        ComponentBuilder.save();
-    }
-
-    private void add(JComponent c) {
-        if (c != null) {
-            b.add(c);
-        }
+    public static String getString(String key) {
+        return INSTANCE.p.getProperty(key);
     }
 }
