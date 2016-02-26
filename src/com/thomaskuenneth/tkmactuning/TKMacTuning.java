@@ -71,6 +71,7 @@ public class TKMacTuning extends Application {
 
         String[][] plugins = new String[][]{
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "disable-shadow"},
+            {"com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin", "screencapture_type"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "AppleShowAllFiles"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowHardDrivesOnDesktop"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowPathbar"},
@@ -119,7 +120,6 @@ public class TKMacTuning extends Application {
             Class clazz = Class.forName(className);
             Constructor cons = clazz.getConstructor(String.class);
             AbstractPlugin plugin = (AbstractPlugin) cons.newInstance(pluginName);
-            Control c = ComponentBuilder.createComponent(plugin);
             String uiCategory = plugin.getUICategory();
             Tab tab = (Tab) tabPane.getProperties().get(uiCategory);
             if (tab == null) {
@@ -131,7 +131,13 @@ public class TKMacTuning extends Application {
                 tab.setContent(vbox);
             }
             VBox root = (VBox) tab.getContent();
-            root.getChildren().add(c);
+            Control control = ComponentBuilder.createComponent(plugin);
+            if (control != null) {
+                root.getChildren().add(control);
+            } else {
+                LOGGER.log(Level.SEVERE, "could not create control for plugin {0}({1})",
+                        new Object[]{className, pluginName});
+            }
         } catch (InstantiationException | ClassNotFoundException |
                 NoSuchMethodException | SecurityException |
                 InvocationTargetException | IllegalAccessException ex) {
