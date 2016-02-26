@@ -67,15 +67,18 @@ public class TKMacTuning extends Application {
     public void start(Stage primaryStage) {
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        addBooleanPlugin(tabPane, "disable-shadow");
-        addBooleanPlugin(tabPane, "AppleShowAllFiles");
+        String[] booleanPlugins = {"disable-shadow",
+            "AppleShowAllFiles", "ShowHardDrivesOnDesktop", "ShowPathbar", "ShowStatusBar"};
+        for (String pluginName : booleanPlugins) {
+            addBooleanPlugin(tabPane, pluginName);
+        }
 
         FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
         flowPane.setPadding(PADDING_1);
         flowPane.setAlignment(Pos.BASELINE_RIGHT);
         flowPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
         flowPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
-        
+
         BorderPane borderPane = new BorderPane(tabPane);
         borderPane.setTop(flowPane);
         primaryStage.setScene(new Scene(borderPane, 300, 250));
