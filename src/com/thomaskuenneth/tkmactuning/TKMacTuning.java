@@ -28,10 +28,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -44,6 +49,8 @@ public class TKMacTuning extends Application {
 
     private static final Logger LOGGER = Logger.getLogger(TKMacTuning.class.getName());
     private static final TKMacTuning INSTANCE = new TKMacTuning();
+
+    private static final Insets PADDING_1 = new Insets(10, 10, 10, 10);
 
     private final Properties p;
 
@@ -62,7 +69,16 @@ public class TKMacTuning extends Application {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         addBooleanPlugin(tabPane, "disable-shadow");
         addBooleanPlugin(tabPane, "AppleShowAllFiles");
-        primaryStage.setScene(new Scene(tabPane, 300, 250));
+
+        FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
+        flowPane.setPadding(PADDING_1);
+        flowPane.setAlignment(Pos.BASELINE_RIGHT);
+        flowPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
+        flowPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
+        
+        BorderPane borderPane = new BorderPane(tabPane);
+        borderPane.setTop(flowPane);
+        primaryStage.setScene(new Scene(borderPane, 300, 250));
         primaryStage.show();
     }
 
@@ -94,7 +110,7 @@ public class TKMacTuning extends Application {
             tabPane.getProperties().put(uiCategory, tab);
             tabPane.getTabs().add(tab);
             VBox vbox = new VBox();
-            vbox.setPadding(new Insets(10, 10, 10, 10));
+            vbox.setPadding(PADDING_1);
             tab.setContent(vbox);
         }
         VBox root = (VBox) tab.getContent();
