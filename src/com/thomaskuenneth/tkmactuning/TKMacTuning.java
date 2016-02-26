@@ -21,8 +21,9 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
-import com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,10 +68,20 @@ public class TKMacTuning extends Application {
     public void start(Stage primaryStage) {
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        String[] booleanPlugins = {"disable-shadow",
-            "AppleShowAllFiles", "ShowHardDrivesOnDesktop", "ShowPathbar", "ShowStatusBar"};
-        for (String pluginName : booleanPlugins) {
-            addBooleanPlugin(tabPane, pluginName);
+
+        String[][] plugins = new String[][]{
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "disable-shadow"},
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "AppleShowAllFiles"},
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowHardDrivesOnDesktop"},
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowPathbar"},
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowStatusBar"}
+        };
+        for (String[] data : plugins) {
+            if (data.length != 2) {
+                throw new RuntimeException("array must have two elements");
+            } else {
+                addPlugin(tabPane, data[0], data[1]);
+            }
         }
 
         FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
@@ -103,20 +114,28 @@ public class TKMacTuning extends Application {
         return INSTANCE.p.getProperty(key);
     }
 
-    private void addBooleanPlugin(TabPane tabPane, String pluginName) {
-        AbstractPlugin plugin = new BooleanPlugin(pluginName);
-        Control c = ComponentBuilder.createComponent(plugin);
-        String uiCategory = plugin.getUICategory();
-        Tab tab = (Tab) tabPane.getProperties().get(uiCategory);
-        if (tab == null) {
-            tab = new Tab(uiCategory);
-            tabPane.getProperties().put(uiCategory, tab);
-            tabPane.getTabs().add(tab);
-            VBox vbox = new VBox();
-            vbox.setPadding(PADDING_1);
-            tab.setContent(vbox);
+    private void addPlugin(TabPane tabPane, String className, String pluginName) {
+        try {
+            Class clazz = Class.forName(className);
+            Constructor cons = clazz.getConstructor(String.class);
+            AbstractPlugin plugin = (AbstractPlugin) cons.newInstance(pluginName);
+            Control c = ComponentBuilder.createComponent(plugin);
+            String uiCategory = plugin.getUICategory();
+            Tab tab = (Tab) tabPane.getProperties().get(uiCategory);
+            if (tab == null) {
+                tab = new Tab(uiCategory);
+                tabPane.getProperties().put(uiCategory, tab);
+                tabPane.getTabs().add(tab);
+                VBox vbox = new VBox();
+                vbox.setPadding(PADDING_1);
+                tab.setContent(vbox);
+            }
+            VBox root = (VBox) tab.getContent();
+            root.getChildren().add(c);
+        } catch (InstantiationException | ClassNotFoundException |
+                NoSuchMethodException | SecurityException |
+                InvocationTargetException | IllegalAccessException ex) {
+            LOGGER.log(Level.SEVERE, "addPlugin()", ex);
         }
-        VBox root = (VBox) tab.getContent();
-        root.getChildren().add(c);
     }
 }
