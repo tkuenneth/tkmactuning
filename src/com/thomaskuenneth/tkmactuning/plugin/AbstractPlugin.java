@@ -62,6 +62,15 @@ public abstract class AbstractPlugin<T> implements IFPlugin<T> {
         return getString("secondaryCategory");
     }
 
+    @Override
+    public String getUICategory() {
+        String uiCategory = getString("uiCategory");
+        if (uiCategory == null) {
+            uiCategory = getApplicationName();
+        }
+        return uiCategory;
+    }
+
     private String getString(String key) {
         return TKMacTuning.getString(pluginName + "." + key);
     }

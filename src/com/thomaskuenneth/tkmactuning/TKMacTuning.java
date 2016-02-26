@@ -41,12 +41,12 @@ import javafx.stage.Stage;
  * @author Thomas Kuenneth
  */
 public class TKMacTuning extends Application {
-    
+
     private static final Logger LOGGER = Logger.getLogger(TKMacTuning.class.getName());
     private static final TKMacTuning INSTANCE = new TKMacTuning();
-    
+
     private final Properties p;
-    
+
     public TKMacTuning() {
         p = new Properties();
         try {
@@ -55,7 +55,7 @@ public class TKMacTuning extends Application {
             LOGGER.log(Level.SEVERE, "loading properties file failed", ex);
         }
     }
-    
+
     @Override
     public void start(Stage primaryStage) {
         TabPane tabPane = new TabPane();
@@ -65,7 +65,7 @@ public class TKMacTuning extends Application {
         primaryStage.setScene(new Scene(tabPane, 300, 250));
         primaryStage.show();
     }
-    
+
     @Override
     public void stop() throws Exception {
         ComponentBuilder.save();
@@ -79,19 +79,19 @@ public class TKMacTuning extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
     public static String getString(String key) {
         return INSTANCE.p.getProperty(key);
     }
-    
+
     private void addBooleanPlugin(TabPane tabPane, String pluginName) {
         AbstractPlugin plugin = new BooleanPlugin(pluginName);
         Control c = ComponentBuilder.createComponent(plugin);
-        String applicationName = plugin.getApplicationName();
-        Tab tab = (Tab) tabPane.getProperties().get(applicationName);
+        String uiCategory = plugin.getUICategory();
+        Tab tab = (Tab) tabPane.getProperties().get(uiCategory);
         if (tab == null) {
-            tab = new Tab(applicationName);
-            tabPane.getProperties().put(applicationName, tab);
+            tab = new Tab(uiCategory);
+            tabPane.getProperties().put(uiCategory, tab);
             tabPane.getTabs().add(tab);
             VBox vbox = new VBox();
             vbox.setPadding(new Insets(10, 10, 10, 10));
