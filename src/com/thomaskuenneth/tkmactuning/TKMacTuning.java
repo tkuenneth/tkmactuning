@@ -94,8 +94,15 @@ public class TKMacTuning extends Application {
         FlowPane bottomPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
         bottomPane.setPadding(PADDING_1);
         bottomPane.setAlignment(Pos.BASELINE_RIGHT);
-        bottomPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
-        bottomPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
+        final Button buttonReset = new Button(getString("reset"));
+        buttonReset.setOnAction(event -> {
+        });
+        bottomPane.getChildren().add(buttonReset);
+        final Button buttonApply = new Button(getString("apply"));
+        buttonApply.setOnAction(event -> {
+            ComponentBuilder.save();
+        });
+        bottomPane.getChildren().add(buttonApply);
 
         BorderPane borderPane = new BorderPane(tabPane);
         borderPane.setTop(topPane);
@@ -106,7 +113,6 @@ public class TKMacTuning extends Application {
 
     @Override
     public void stop() throws Exception {
-        ComponentBuilder.save();
     }
 
     /**
@@ -118,6 +124,12 @@ public class TKMacTuning extends Application {
         launch(args);
     }
 
+    /**
+     * Gets a string from TKMacTuning.properties.
+     *
+     * @param key key
+     * @return a string from TKMacTuning.properties
+     */
     public static String getString(String key) {
         return INSTANCE.p.getProperty(key);
     }
