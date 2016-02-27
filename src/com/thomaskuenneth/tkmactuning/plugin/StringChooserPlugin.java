@@ -22,8 +22,8 @@ package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
  * This plugin provides access to string values in the Mac OS X Defaults
- * database. However, the user does not enter strings but picks one from a
- * predefined list.
+ * database. Important: in this plugin the user does not enter strings but picks
+ * one from a predefined list.
  *
  * @author Thomas Kuenneth
  */
@@ -33,4 +33,20 @@ public class StringChooserPlugin extends StringPlugin {
         super(plugin);
     }
 
+    /**
+     * Returns a list of predefined strings
+     *
+     * @return a list of predefined strings
+     */
+    public String[] getValues() {
+        String values = getString("values");
+        if (values != null) {
+            String[] possibleValues = values.split("\\|");
+            for (int i = 0; i < possibleValues.length; i++) {
+                possibleValues[i] = possibleValues[i].trim();
+            }
+            return possibleValues;
+        }
+        return null;
+    }
 }

@@ -71,7 +71,7 @@ public abstract class AbstractPlugin<T> implements IFPlugin<T> {
         return uiCategory;
     }
 
-    private String getString(String key) {
+    final String getString(String key) {
         String result = TKMacTuning.getString(pluginName + "." + key);
         if ((result != null) && (result.startsWith("$$$"))) {
             result = TKMacTuning.getString(result);

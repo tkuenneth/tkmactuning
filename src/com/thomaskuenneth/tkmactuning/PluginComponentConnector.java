@@ -22,7 +22,7 @@ package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Control;
+import javafx.scene.control.ComboBox;
 
 /**
  * This class connects plugins to controls.
@@ -31,13 +31,29 @@ import javafx.scene.control.Control;
  */
 public class PluginComponentConnector {
 
-    public static void connect(final AbstractPlugin plugin, Control control) {
-        if (control instanceof CheckBox) {
-            final CheckBox cb = ((CheckBox) control);
-            cb.setSelected((boolean) plugin.getValue());
-            cb.setOnAction((event) -> {
-                plugin.setValue(cb.isSelected());
-            });
-        }
+    /**
+     * Connect a plugin to a checkbox.
+     *
+     * @param plugin plugin
+     * @param checkbox checkbox
+     */
+    public static void connect(final AbstractPlugin plugin, CheckBox checkbox) {
+        checkbox.setSelected((boolean) plugin.getValue());
+        checkbox.setOnAction((event) -> {
+            plugin.setValue(checkbox.isSelected());
+        });
+    }
+
+    /**
+     * Connect a plugin to a combobox.
+     *
+     * @param plugin plugin
+     * @param combobox combobox
+     */
+    public static void connect(final AbstractPlugin plugin, ComboBox combobox) {
+        combobox.setValue(plugin.getValue());
+        combobox.setOnAction(event -> {
+            plugin.setValue(combobox.getValue());
+        });
     }
 }

@@ -21,13 +21,20 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
+import com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.Defaults;
 import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
+import com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Control;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 /**
  * This class is used to create controls for plugins.
@@ -35,31 +42,32 @@ import javafx.scene.control.Control;
  * @author Thomas Kuenneth
  */
 public class ComponentBuilder {
-
+    
     private static final List<IFPlugin> L = new ArrayList<>();
-
-    public static Control createComponent(AbstractPlugin plugin) {
-        Class type = plugin.getType();
-        Control result = null;
-        if (Boolean.class.equals(type)) {
+    
+    public static Node createComponent(AbstractPlugin plugin) {
+        Node result = null;
+        if (plugin instanceof StringChooserPlugin) {
+            String[] possibleValues = ((StringChooserPlugin) plugin).getValues();
+            ComboBox combobox = new ComboBox();
+            combobox.getItems().addAll(Arrays.asList(possibleValues));
+            PluginComponentConnector.connect(plugin, combobox);
+            HBox hbox = new HBox();
+            hbox.setAlignment(Pos.BASELINE_LEFT);
+            hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);
+            hbox.getChildren().add(new Label(plugin.getShortDescription()));
+            hbox.getChildren().add(combobox);
+            result = hbox;
+        } else if (plugin instanceof BooleanPlugin) {
             result = new CheckBox(plugin.getShortDescription());
-            configure(plugin, result);
-//        } else if (String.class.equals(type)) {
-//            JTextField tf = new JTextField(40);
-//            configure(plugin, tf);
-//            JPanel p = new JPanel();
-//            p.add(new JLabel(plugin.getShortDescription()));
-//            p.add(tf);
-//            return p;
+            PluginComponentConnector.connect(plugin, (CheckBox) result);
+        }
+        if (result != null) {
+            L.add(plugin);
         }
         return result;
     }
-
-    private static void configure(AbstractPlugin plugin, Control c) {
-        PluginComponentConnector.connect(plugin, c);
-        L.add(plugin);
-    }
-
+    
     public static void save() {
         HashMap<String, Boolean> map = new HashMap<>();
         L.stream().forEach((plugin) -> {

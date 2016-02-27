@@ -31,9 +31,9 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
@@ -85,14 +85,21 @@ public class TKMacTuning extends Application {
             }
         }
 
-        FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
-        flowPane.setPadding(PADDING_1);
-        flowPane.setAlignment(Pos.BASELINE_RIGHT);
-        flowPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
-        flowPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
+        FlowPane topPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
+        topPane.setPadding(PADDING_1);
+        topPane.setAlignment(Pos.BASELINE_RIGHT);
+        topPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
+        topPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
+
+        FlowPane bottomPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
+        bottomPane.setPadding(PADDING_1);
+        bottomPane.setAlignment(Pos.BASELINE_RIGHT);
+        bottomPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
+        bottomPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
 
         BorderPane borderPane = new BorderPane(tabPane);
-        borderPane.setTop(flowPane);
+        borderPane.setTop(topPane);
+        borderPane.setBottom(bottomPane);
         primaryStage.setScene(new Scene(borderPane, 300, 250));
         primaryStage.show();
     }
@@ -128,12 +135,13 @@ public class TKMacTuning extends Application {
                 tabPane.getTabs().add(tab);
                 VBox vbox = new VBox();
                 vbox.setPadding(PADDING_1);
+                vbox.setSpacing(LayoutConstants.VERTICAL_CONTROL_GAP);
                 tab.setContent(vbox);
             }
             VBox root = (VBox) tab.getContent();
-            Control control = ComponentBuilder.createComponent(plugin);
-            if (control != null) {
-                root.getChildren().add(control);
+            Node node = ComponentBuilder.createComponent(plugin);
+            if (node != null) {
+                root.getChildren().add(node);
             } else {
                 LOGGER.log(Level.SEVERE, "could not create control for plugin {0}({1})",
                         new Object[]{className, pluginName});
