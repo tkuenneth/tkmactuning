@@ -22,12 +22,11 @@ package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.Defaults;
-import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 
 /**
  * This class connects plugins to controls.
@@ -36,7 +35,7 @@ import javafx.scene.control.ComboBox;
  */
 public class PluginComponentConnector {
 
-    private static final List<IFPlugin> L = new ArrayList<>();
+    private static final Map<AbstractPlugin, Control> M = new HashMap();
 
     /**
      * Connect a plugin to a checkbox.
@@ -45,11 +44,11 @@ public class PluginComponentConnector {
      * @param checkbox checkbox
      */
     public static void connect(final AbstractPlugin plugin, CheckBox checkbox) {
-        checkbox.setSelected((boolean) plugin.getValue());
+        updateCheckBox(plugin, checkbox);
         checkbox.setOnAction((event) -> {
             plugin.setValue(checkbox.isSelected());
         });
-        L.add(plugin);
+        M.put(plugin, checkbox);
     }
 
     /**
@@ -59,11 +58,11 @@ public class PluginComponentConnector {
      * @param combobox combobox
      */
     public static void connect(final AbstractPlugin plugin, ComboBox combobox) {
-        combobox.setValue(plugin.getValue());
+        updateComboBox(plugin, combobox);
         combobox.setOnAction(event -> {
             plugin.setValue(combobox.getValue());
         });
-        L.add(plugin);
+        M.put(plugin, combobox);
     }
 
     /**
@@ -72,7 +71,7 @@ public class PluginComponentConnector {
     public static void save() {
         // TODO: check if the state has changed; if not, app does not need to be killed
         HashMap<String, Boolean> map = new HashMap<>();
-        L.stream().forEach((plugin) -> {
+        M.keySet().stream().forEach((plugin) -> {
             String applicationName = plugin.getApplicationName();
             if (!map.containsKey(applicationName)) {
                 map.put(applicationName, true);
@@ -82,5 +81,28 @@ public class PluginComponentConnector {
         map.keySet().stream().forEach((String applicationName) -> {
             Defaults.killall(applicationName);
         });
+    }
+
+    /**
+     * Resets the ui to the last saved values.
+     */
+    public static void reset() {
+        M.keySet().stream().forEach((plugin) -> {
+            plugin.readValue();
+            Control control = M.get(plugin);
+            if (control instanceof CheckBox) {
+                updateCheckBox(plugin, (CheckBox) control);
+            } else if (control instanceof ComboBox) {
+                updateComboBox(plugin, (ComboBox) control);
+            }
+        });
+    }
+
+    private static void updateCheckBox(final AbstractPlugin plugin, CheckBox checkbox) {
+        checkbox.setSelected((boolean) plugin.getValue());
+    }
+
+    private static void updateComboBox(final AbstractPlugin plugin, ComboBox combobox) {
+        combobox.setValue(plugin.getValue());
     }
 }
