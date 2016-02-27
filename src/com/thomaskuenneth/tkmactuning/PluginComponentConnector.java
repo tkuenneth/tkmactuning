@@ -21,6 +21,11 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
+import com.thomaskuenneth.tkmactuning.plugin.Defaults;
+import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 
@@ -30,6 +35,8 @@ import javafx.scene.control.ComboBox;
  * @author Thomas Kuenneth
  */
 public class PluginComponentConnector {
+
+    private static final List<IFPlugin> L = new ArrayList<>();
 
     /**
      * Connect a plugin to a checkbox.
@@ -42,6 +49,7 @@ public class PluginComponentConnector {
         checkbox.setOnAction((event) -> {
             plugin.setValue(checkbox.isSelected());
         });
+        L.add(plugin);
     }
 
     /**
@@ -54,6 +62,25 @@ public class PluginComponentConnector {
         combobox.setValue(plugin.getValue());
         combobox.setOnAction(event -> {
             plugin.setValue(combobox.getValue());
+        });
+        L.add(plugin);
+    }
+
+    /**
+     * Saves the current plugin state and kills the corresponding apps.
+     */
+    public static void save() {
+        // TODO: check if the state has changed; if not, app does not need to be killed
+        HashMap<String, Boolean> map = new HashMap<>();
+        L.stream().forEach((plugin) -> {
+            String applicationName = plugin.getApplicationName();
+            if (!map.containsKey(applicationName)) {
+                map.put(applicationName, true);
+            }
+            plugin.writeValue();
+        });
+        map.keySet().stream().forEach((String applicationName) -> {
+            Defaults.killall(applicationName);
         });
     }
 }

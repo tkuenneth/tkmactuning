@@ -22,13 +22,8 @@ package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin;
-import com.thomaskuenneth.tkmactuning.plugin.Defaults;
-import com.thomaskuenneth.tkmactuning.plugin.IFPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -37,14 +32,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 /**
- * This class is used to create controls for plugins.
+ * This class is used to create controls (nodes) for plugins.
  *
  * @author Thomas Kuenneth
  */
 public class ComponentBuilder {
-    
-    private static final List<IFPlugin> L = new ArrayList<>();
-    
+
     public static Node createComponent(AbstractPlugin plugin) {
         Node result = null;
         if (plugin instanceof StringChooserPlugin) {
@@ -62,23 +55,6 @@ public class ComponentBuilder {
             result = new CheckBox(plugin.getShortDescription());
             PluginComponentConnector.connect(plugin, (CheckBox) result);
         }
-        if (result != null) {
-            L.add(plugin);
-        }
         return result;
-    }
-    
-    public static void save() {
-        HashMap<String, Boolean> map = new HashMap<>();
-        L.stream().forEach((plugin) -> {
-            String applicationName = plugin.getApplicationName();
-            if (!map.containsKey(applicationName)) {
-                map.put(applicationName, true);
-            }
-            plugin.writeValue();
-        });
-        map.keySet().stream().forEach((applicationName) -> {
-            Defaults.killall(applicationName);
-        });
     }
 }

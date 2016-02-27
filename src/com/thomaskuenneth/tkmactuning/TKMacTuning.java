@@ -28,7 +28,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -50,8 +49,6 @@ public class TKMacTuning extends Application {
 
     private static final Logger LOGGER = Logger.getLogger(TKMacTuning.class.getName());
     private static final TKMacTuning INSTANCE = new TKMacTuning();
-
-    private static final Insets PADDING_1 = new Insets(10, 10, 10, 10);
 
     private final Properties p;
 
@@ -85,14 +82,16 @@ public class TKMacTuning extends Application {
             }
         }
 
-        FlowPane topPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
-        topPane.setPadding(PADDING_1);
+        FlowPane topPane = new FlowPane(Orientation.HORIZONTAL,
+                LayoutConstants.HORIZONTAL_CONTROL_GAP, 0);
+        topPane.setPadding(LayoutConstants.PADDING_1);
         topPane.setAlignment(Pos.BASELINE_RIGHT);
         topPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
         topPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
 
-        FlowPane bottomPane = new FlowPane(Orientation.HORIZONTAL, 10, 0);
-        bottomPane.setPadding(PADDING_1);
+        FlowPane bottomPane = new FlowPane(Orientation.HORIZONTAL,
+                LayoutConstants.HORIZONTAL_CONTROL_GAP, 0);
+        bottomPane.setPadding(LayoutConstants.PADDING_1);
         bottomPane.setAlignment(Pos.BASELINE_RIGHT);
         final Button buttonReset = new Button(getString("reset"));
         buttonReset.setOnAction(event -> {
@@ -100,7 +99,7 @@ public class TKMacTuning extends Application {
         bottomPane.getChildren().add(buttonReset);
         final Button buttonApply = new Button(getString("apply"));
         buttonApply.setOnAction(event -> {
-            ComponentBuilder.save();
+            PluginComponentConnector.save();
         });
         bottomPane.getChildren().add(buttonApply);
 
@@ -146,7 +145,7 @@ public class TKMacTuning extends Application {
                 tabPane.getProperties().put(uiCategory, tab);
                 tabPane.getTabs().add(tab);
                 VBox vbox = new VBox();
-                vbox.setPadding(PADDING_1);
+                vbox.setPadding(LayoutConstants.PADDING_1);
                 vbox.setSpacing(LayoutConstants.VERTICAL_CONTROL_GAP);
                 tab.setContent(vbox);
             }

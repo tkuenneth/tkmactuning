@@ -20,6 +20,8 @@
  */
 package com.thomaskuenneth.tkmactuning;
 
+import javafx.geometry.Insets;
+
 /**
  * This class contains constants for building the layout of the ui.
  *
@@ -36,4 +38,14 @@ public class LayoutConstants {
      * The vertical gap between two rows in the ui.
      */
     public static final double VERTICAL_CONTROL_GAP = 2;
+    
+    /**
+     * Used as the padding for panels.
+     */
+    public static final Insets PADDING_1 = new Insets(10, 10, 10, 10);
+    
+    /**
+     * The horizontal gap between two controls.
+     */
+    public static final double HORIZONTAL_CONTROL_GAP = 10;
 }
