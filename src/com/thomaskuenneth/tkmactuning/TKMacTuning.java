@@ -91,7 +91,7 @@ public class TKMacTuning extends Application {
         FlowPane buttonsPane = new FlowPane(Orientation.HORIZONTAL);
         buttonsPane.setPadding(LayoutConstants.PADDING_1);
         buttonsPane.setHgap(LayoutConstants.HORIZONTAL_CONTROL_GAP);
-        buttonsPane.setAlignment(Pos.BASELINE_RIGHT);
+        buttonsPane.setAlignment(Pos.BASELINE_LEFT);
         final Button buttonReset = new Button(getString("reset"));
         buttonReset.setOnAction(event -> {
             PluginComponentConnector.reset();
@@ -163,7 +163,9 @@ public class TKMacTuning extends Application {
                     if (group == null) {
                         group = new VBox(LayoutConstants.VERTICAL_CONTROL_GAP);
                         tabPane.getProperties().put(GROUP + secondaryUICategory, group);
-                        Label headline = new Label(secondaryUICategory);
+                        HBox headline = new HBox();
+                        headline.setStyle("-fx-border-insets: 1 0 1 0; -fx-border-color: transparent transparent -fx-text-box-border transparent; -fx-border-width: 1;");
+                        headline.getChildren().add(new Label(secondaryUICategory));
                         group.getChildren().add(headline);
                         content.getChildren().add(group);
                     }
