@@ -29,6 +29,8 @@ import com.thomaskuenneth.tkmactuning.TKMacTuning;
  * @param <T> the type of the value being handled by the plugin
  */
 public abstract class AbstractPlugin<T> implements IFPlugin<T> {
+    
+    public static final String ROOT = "root";
 
     private final String pluginName;
 
@@ -63,12 +65,21 @@ public abstract class AbstractPlugin<T> implements IFPlugin<T> {
     }
 
     @Override
-    public String getUICategory() {
-        String uiCategory = getString("uiCategory");
-        if (uiCategory == null) {
-            uiCategory = getApplicationName();
+    public String getPrimaryUICategory() {
+        String primaryUICategory = getString("primaryUICategory");
+        if (primaryUICategory == null) {
+            primaryUICategory = getApplicationName();
         }
-        return uiCategory;
+        return primaryUICategory;
+    }
+    
+    @Override
+    public String getSecondaryUICategory() {
+        String secondaryUICategory = getString("secondaryUICategory");
+        if (secondaryUICategory == null) {
+            secondaryUICategory = ROOT;
+        }
+        return secondaryUICategory;
     }
 
     final String getString(String key) {

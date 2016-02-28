@@ -103,9 +103,16 @@ public interface IFPlugin<T> {
     public String getSecondaryCategory();
     
     /**
-     * Returns the category for the user interface 
+     * Returns the primary user interface category
      * 
-     * @return the ui category
+     * @return primary user interface category
      */
-    public String getUICategory();
+    public String getPrimaryUICategory();
+        
+    /**
+     * Returns the secondary user interface category
+     * 
+     * @return secondary user interface category
+     */
+    public String getSecondaryUICategory();
 }

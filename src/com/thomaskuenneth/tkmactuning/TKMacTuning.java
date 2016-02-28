@@ -39,6 +39,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -51,6 +52,7 @@ public class TKMacTuning extends Application {
 
     private static final Logger LOGGER = Logger.getLogger(TKMacTuning.class.getName());
     private static final TKMacTuning INSTANCE = new TKMacTuning();
+    private static final String GROUP = "group_";
 
     private final Properties p;
 
@@ -103,7 +105,6 @@ public class TKMacTuning extends Application {
 
         HBox statusbar = new HBox();
         statusbar.getChildren().add(new Label("TODO: set it up"));
-        statusbar.setStyle("-fx-border-insets: 1 0 0 0; -fx-border-color: -fx-text-box-border transparent transparent transparent; -fx-border-width: 1;");
 
         BorderPane borderPane = new BorderPane(tabPane);
         borderPane.setTop(buttonsPane);
@@ -140,21 +141,34 @@ public class TKMacTuning extends Application {
             Class clazz = Class.forName(className);
             Constructor cons = clazz.getConstructor(String.class);
             AbstractPlugin plugin = (AbstractPlugin) cons.newInstance(pluginName);
-            String uiCategory = plugin.getUICategory();
-            Tab tab = (Tab) tabPane.getProperties().get(uiCategory);
+            String primaryUICategory = plugin.getPrimaryUICategory();
+            Tab tab = (Tab) tabPane.getProperties().get(primaryUICategory);
             if (tab == null) {
-                tab = new Tab(uiCategory);
-                tabPane.getProperties().put(uiCategory, tab);
+                tab = new Tab(primaryUICategory);
+                tabPane.getProperties().put(primaryUICategory, tab);
                 tabPane.getTabs().add(tab);
-                VBox vbox = new VBox();
-                vbox.setPadding(LayoutConstants.PADDING_1);
-                vbox.setSpacing(LayoutConstants.VERTICAL_CONTROL_GAP);
-                tab.setContent(vbox);
+                VBox content = new VBox();
+                content.setPadding(LayoutConstants.PADDING_1);
+                content.setSpacing(LayoutConstants.VERTICAL_CONTROL_GAP);
+                tab.setContent(content);
             }
-            VBox root = (VBox) tab.getContent();
+            VBox content = (VBox) tab.getContent();
             Node node = ComponentBuilder.createComponent(plugin);
             if (node != null) {
-                root.getChildren().add(node);
+                String secondaryUICategory = plugin.getSecondaryUICategory();
+                if (AbstractPlugin.ROOT.equals(secondaryUICategory)) {
+                    content.getChildren().add(node);
+                } else {
+                    Pane group = (Pane) tabPane.getProperties().get(GROUP + secondaryUICategory);
+                    if (group == null) {
+                        group = new VBox(LayoutConstants.VERTICAL_CONTROL_GAP);
+                        tabPane.getProperties().put(GROUP + secondaryUICategory, group);
+                        Label headline = new Label(secondaryUICategory);
+                        group.getChildren().add(headline);
+                        content.getChildren().add(group);
+                    }
+                    group.getChildren().add(node);
+                }
             } else {
                 LOGGER.log(Level.SEVERE, "could not create control for plugin {0}({1})",
                         new Object[]{className, pluginName});
