@@ -33,10 +33,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -65,6 +67,8 @@ public class TKMacTuning extends Application {
     public void start(Stage primaryStage) {
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        // Found here: http://stackoverflow.com/a/17488304/5956451
+        tabPane.getStyleClass().add("floating");
 
         String[][] plugins = new String[][]{
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "disable-shadow"},
@@ -82,31 +86,28 @@ public class TKMacTuning extends Application {
             }
         }
 
-        FlowPane topPane = new FlowPane(Orientation.HORIZONTAL,
-                LayoutConstants.HORIZONTAL_CONTROL_GAP, 0);
-        topPane.setPadding(LayoutConstants.PADDING_1);
-        topPane.setAlignment(Pos.BASELINE_RIGHT);
-        topPane.getChildren().add(new Button("Hello 1")); // FIXME: temp
-        topPane.getChildren().add(new Button("Hello 2")); // FIXME: temp
-
-        FlowPane bottomPane = new FlowPane(Orientation.HORIZONTAL,
-                LayoutConstants.HORIZONTAL_CONTROL_GAP, 0);
-        bottomPane.setPadding(LayoutConstants.PADDING_1);
-        bottomPane.setAlignment(Pos.BASELINE_RIGHT);
+        FlowPane buttonsPane = new FlowPane(Orientation.HORIZONTAL);
+        buttonsPane.setPadding(LayoutConstants.PADDING_1);
+        buttonsPane.setHgap(LayoutConstants.HORIZONTAL_CONTROL_GAP);
+        buttonsPane.setAlignment(Pos.BASELINE_RIGHT);
         final Button buttonReset = new Button(getString("reset"));
         buttonReset.setOnAction(event -> {
             PluginComponentConnector.reset();
         });
-        bottomPane.getChildren().add(buttonReset);
+        buttonsPane.getChildren().add(buttonReset);
         final Button buttonApply = new Button(getString("apply"));
         buttonApply.setOnAction(event -> {
             PluginComponentConnector.save();
         });
-        bottomPane.getChildren().add(buttonApply);
+        buttonsPane.getChildren().add(buttonApply);
+
+        HBox statusbar = new HBox();
+        statusbar.getChildren().add(new Label("TODO: set it up"));
+        statusbar.setStyle("-fx-border-insets: 1 0 0 0; -fx-border-color: -fx-text-box-border transparent transparent transparent; -fx-border-width: 1;");
 
         BorderPane borderPane = new BorderPane(tabPane);
-        borderPane.setTop(topPane);
-        borderPane.setBottom(bottomPane);
+        borderPane.setTop(buttonsPane);
+        borderPane.setBottom(statusbar);
         primaryStage.setScene(new Scene(borderPane, 300, 250));
         primaryStage.show();
     }
