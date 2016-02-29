@@ -32,7 +32,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 
 /**
  * This class is used to create controls (nodes) for plugins.
@@ -67,16 +66,14 @@ public class ComponentBuilder {
             final Label label = new Label(shortDescription);
             hbox.getChildren().add(label);
             ImageView imageview = new ImageView();
-            StackPane p = new StackPane();
-            p.setStyle("-fx-border-insets: 1 1 1 1; -fx-border-color: -fx-text-box-border -fx-text-box-border -fx-text-box-border -fx-text-box-border; -fx-border-width: 1;");
-            p.getChildren().add(imageview);
             imageview.setFitWidth(100);
             imageview.setFitHeight(100);
             imageview.setSmooth(true);
             imageview.setPreserveRatio(true);
             label.setLabelFor(imageview);
-            hbox.getChildren().add(p);
+            hbox.getChildren().add(imageview);
             result = hbox;
+            PluginComponentConnector.connect(plugin, imageview);
         }
         return result;
     }

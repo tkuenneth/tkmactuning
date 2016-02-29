@@ -36,7 +36,7 @@ public class OSAScriptPlugin extends StringPlugin {
         String cmd = String.format("tell application \"%s\" to %s",
                 getString("applicationName"),
                 getString("read"));
-        String result = Defaults.osascript(cmd);
+        String result = Defaults.osascript(cmd).trim();
         setValue(result);
     }
 

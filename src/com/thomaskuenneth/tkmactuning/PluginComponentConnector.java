@@ -22,11 +22,14 @@ package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.Defaults;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * This class connects plugins to controls.
@@ -35,7 +38,7 @@ import javafx.scene.control.Control;
  */
 public class PluginComponentConnector {
 
-    private static final Map<AbstractPlugin, Control> M = new HashMap();
+    private static final Map<AbstractPlugin, Node> M = new HashMap();
 
     /**
      * Connect a plugin to a checkbox.
@@ -65,6 +68,12 @@ public class PluginComponentConnector {
         M.put(plugin, combobox);
     }
 
+    public static void connect(final AbstractPlugin plugin, ImageView imageview) {
+        updateImageView(plugin, imageview);
+        // FIXME: react upon actions
+        M.put(plugin, imageview);
+    }
+
     /**
      * Saves the current plugin state and kills the corresponding apps.
      */
@@ -89,11 +98,13 @@ public class PluginComponentConnector {
     public static void reset() {
         M.keySet().stream().forEach((plugin) -> {
             plugin.readValue();
-            Control control = M.get(plugin);
-            if (control instanceof CheckBox) {
-                updateCheckBox(plugin, (CheckBox) control);
-            } else if (control instanceof ComboBox) {
-                updateComboBox(plugin, (ComboBox) control);
+            Node node = M.get(plugin);
+            if (node instanceof CheckBox) {
+                updateCheckBox(plugin, (CheckBox) node);
+            } else if (node instanceof ComboBox) {
+                updateComboBox(plugin, (ComboBox) node);
+            } else if (node instanceof ImageView) {
+                updateImageView(plugin, (ImageView) node);
             }
         });
     }
@@ -104,5 +115,11 @@ public class PluginComponentConnector {
 
     private static void updateComboBox(final AbstractPlugin plugin, ComboBox combobox) {
         combobox.setValue(plugin.getValue());
+    }
+
+    private static void updateImageView(final AbstractPlugin plugin, ImageView imageview) {
+        String value = (String) plugin.getValue();
+        Image i = new Image(new File(value).toURI().toString(), 100, 100, true, true);
+        imageview.setImage(i);
     }
 }
