@@ -40,6 +40,7 @@ public class ComponentBuilder {
 
     public static Node createComponent(AbstractPlugin plugin) {
         Node result = null;
+        final String shortDescription = plugin.getShortDescription();
         if (plugin instanceof StringChooserPlugin) {
             String[] possibleValues = ((StringChooserPlugin) plugin).getValues();
             ComboBox combobox = new ComboBox();
@@ -48,11 +49,13 @@ public class ComponentBuilder {
             HBox hbox = new HBox();
             hbox.setAlignment(Pos.BASELINE_LEFT);
             hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);
-            hbox.getChildren().add(new Label(plugin.getShortDescription()));
+            final Label label = new Label(shortDescription);
+            label.setLabelFor(combobox);
+            hbox.getChildren().add(label);
             hbox.getChildren().add(combobox);
             result = hbox;
         } else if (plugin instanceof BooleanPlugin) {
-            result = new CheckBox(plugin.getShortDescription());
+            result = new CheckBox(shortDescription);
             PluginComponentConnector.connect(plugin, (CheckBox) result);
         }
         return result;
