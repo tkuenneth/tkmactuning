@@ -78,7 +78,8 @@ public class TKMacTuning extends Application {
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "AppleShowAllFiles"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowHardDrivesOnDesktop"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowPathbar"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowStatusBar"}
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowStatusBar"},
+            {"com.thomaskuenneth.tkmactuning.plugin.OSAScriptPlugin", "desktop_wallpaper"}
         };
         for (String[] data : plugins) {
             if (data.length != 2) {
@@ -109,7 +110,7 @@ public class TKMacTuning extends Application {
         BorderPane borderPane = new BorderPane(tabPane);
         borderPane.setTop(buttonsPane);
         borderPane.setBottom(statusbar);
-        primaryStage.setScene(new Scene(borderPane, 300, 250));
+        primaryStage.setScene(new Scene(borderPane, 800, 600));
         primaryStage.show();
     }
 
