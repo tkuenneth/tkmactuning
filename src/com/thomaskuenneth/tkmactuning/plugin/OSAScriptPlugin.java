@@ -1,7 +1,7 @@
 /*
- * StringPlugin.java
+ * OSAScriptPlugin.java
  *
- * Copyright 2008 - 2016 Thomas Kuenneth
+ * Copyright 2016 Thomas Kuenneth
  *
  * This file is part of TKMacTuning.
  *
@@ -21,41 +21,26 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
- * This plugin provides access to string values in the Mac OS X Defaults
- * database.
+ * This plugin provides access to string values via osascript.
  *
  * @author Thomas Kuenneth
  */
-public class StringPlugin extends AbstractPlugin<String> {
+public class OSAScriptPlugin extends StringPlugin {
 
-    private String value;
-
-    public StringPlugin(String plugin) {
+    public OSAScriptPlugin(String plugin) {
         super(plugin);
     }
 
     @Override
-    public final Class<String> getType() {
-        return String.class;
-    }
-
-    @Override
-    public final String getValue() {
-        return value;
-    }
-
-    @Override
-    public final void setValue(String value) {
-        this.value = value;
-    }
-
-    @Override
     public void readValue() {
-        setValue(Defaults.readString(getPrimaryCategory(), getSecondaryCategory()));
+        String cmd = String.format("tell application \"%s\" to %s",
+                getString("applicationName"),
+                getString("read"));
+        String result = Defaults.osascript(cmd);
+        setValue(result);
     }
 
     @Override
     public void writeValue() {
-        Defaults.write(getPrimaryCategory(), getSecondaryCategory(), getValue());
     }
 }

@@ -40,6 +40,17 @@ public final class Defaults {
     private Defaults() {
     }
 
+    public static String osascript(String script) {
+        StringBuilder sbIS = new StringBuilder();
+        StringBuilder sbES = new StringBuilder();
+        ProcessBuilder pb = new ProcessBuilder("/usr/bin/osascript", "-e", script);
+        int result = start(pb, sbIS, sbES);
+        if (result != 0) {
+            LOGGER.log(Level.INFO, sbES.toString());
+        }
+        return sbIS.toString();
+    }
+
     public static void killall(String applicationName) {
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
