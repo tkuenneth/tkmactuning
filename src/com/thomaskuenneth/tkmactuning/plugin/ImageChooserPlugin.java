@@ -22,7 +22,8 @@ package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
  * This plugin provides access to string values. Important: in this plugin the
- * user does not enter strings but picks images stored in the file system
+ * user does not enter strings but picks images stored in the file system. So
+ * the string is the file name of the image.
  *
  * @author Thomas Kuenneth
  */

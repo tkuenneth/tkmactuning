@@ -47,17 +47,4 @@ public class BooleanPlugin extends AbstractPlugin<Boolean> {
     public final void setValue(Boolean value) {
         this.value = value;
     }
-
-    @Override
-    public Boolean convertFromString(String s) {
-        if (("1".equals(s)) || ("true".equalsIgnoreCase(s))) {
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    @Override
-    public String convertToString(Boolean value) {
-        return "-bool " + value.toString().toUpperCase();
-    }
 }

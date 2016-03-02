@@ -22,7 +22,8 @@ package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
  * This plugin provides access to string values. Important: in this plugin the
- * user does not enter strings but picks one from a predefined list.
+ * user does not enter strings but picks one from a predefined list. List items
+ * are separated with the pipe symbol.
  *
  * @author Thomas Kuenneth
  */

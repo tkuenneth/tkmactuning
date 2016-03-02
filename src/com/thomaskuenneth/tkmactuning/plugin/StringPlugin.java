@@ -47,15 +47,4 @@ public class StringPlugin extends AbstractPlugin<String> {
     public final void setValue(String value) {
         this.value = value;
     }
-
-    @Override
-    public String convertFromString(String s) {
-        // already got a string, so no conversion is needed
-        return s;
-    }
-
-    @Override
-    public String convertToString(String value) {
-        return "-string " + value;
-    }
 }

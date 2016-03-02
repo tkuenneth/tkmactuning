@@ -119,7 +119,9 @@ public class PluginComponentConnector {
 
     private static void updateImageView(final AbstractPlugin plugin, ImageView imageview) {
         String value = (String) plugin.getValue();
-        Image i = new Image(new File(value).toURI().toString(), 100, 100, true, true);
-        imageview.setImage(i);
+        if (value != null) {
+            Image i = new Image(new File(value).toURI().toString(), 100, 100, true, true);
+            imageview.setImage(i);
+        }
     }
 }

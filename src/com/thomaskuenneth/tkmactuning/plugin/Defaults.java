@@ -59,29 +59,45 @@ public final class Defaults {
         LOGGER.log(Level.INFO, "appName={0} -> {1}", new Object[]{applicationName, result});
     }
 
-    public static String read(String domain, String key) {
-        String result = "";
+    public static void read(AbstractPlugin plugin) {
+        String domain = plugin.getPrimaryCategory();
+        String key = plugin.getSecondaryCategory();
+        String result = null;
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
         ProcessBuilder pb = new ProcessBuilder(CMD, "read", domain, key);
         if (start(pb, sbIS, sbES) == 0) {
             result = sbIS.toString().trim();
+            if (String.class.equals(plugin.getType())) {
+                plugin.setValue(result);
+            } else if (Boolean.class.equals(plugin.getType())) {
+                plugin.setValue("1".equals(result) || "true".equalsIgnoreCase(result));
+            }
         }
         LOGGER.log(Level.INFO, "domain={0}, key={1} -> {2}", new Object[]{domain, key, result});
-        return result;
     }
 
-    public static void write(String domain, String key, String value) {
-        // FIXME: terrible workaround
-        String [] a = value.split(" ");
-        ProcessBuilder pb = new ProcessBuilder(CMD, "write", domain, key, a[0], a[1]);
+    public static void write(AbstractPlugin plugin) {
+        String domain = plugin.getPrimaryCategory();
+        String key = plugin.getSecondaryCategory();
+        String type = null;
+        String value = null;
+        if (String.class.equals(plugin.getType())) {
+            type = "-string";
+            value = plugin.getValue().toString();
+        } else if (Boolean.class.equals(plugin.getType())) {
+            type = "-bool";
+            value = Boolean.TRUE.equals(plugin.getValue()) ? "TRUE" : "FALSE";
+        }
+        ProcessBuilder pb = new ProcessBuilder(CMD, "write", domain, key, type, value);
         try {
             Process process = pb.start();
             process.waitFor();
         } catch (InterruptedException | IOException ex) {
             LOGGER.log(Level.SEVERE, "exception while writing", ex);
         }
-        LOGGER.log(Level.INFO, "domain={0}, key={1}, value={2}", new Object[]{domain, key, value});
+        LOGGER.log(Level.INFO, "domain={0}, key={1}, type={2}, value={3}",
+                new Object[]{domain, key, type, value});
     }
 
     private static int start(ProcessBuilder pb, StringBuilder sbIS, StringBuilder sbES) {

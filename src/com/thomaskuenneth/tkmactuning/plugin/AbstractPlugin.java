@@ -95,29 +95,32 @@ public abstract class AbstractPlugin<T> {
 
     public abstract void setValue(T value);
 
-    public abstract T convertFromString(String s);
-
     public final void readValue() {
-        if (VALUEPROVIDER_DEFAULTS.equals(valueProvider)) {
-            String s = Defaults.read(getPrimaryCategory(), getSecondaryCategory());
-            setValue(convertFromString(s));
-        } else if (VALUEPROVIDER_OSASCRIPT.equals(valueProvider)) {
-            String cmd = String.format("tell application \"%s\" to %s",
-                    getString("applicationName"),
-                    getString("read"));
-            String result = Defaults.osascript(cmd).trim();
-            setValue(convertFromString(result));
+        if (null != valueProvider) {
+            switch (valueProvider) {
+                case VALUEPROVIDER_DEFAULTS:
+                    Defaults.read(this);
+                    break;
+                case VALUEPROVIDER_OSASCRIPT:
+//                    String cmd = String.format("tell application \"%s\" to %s",
+//                            getString("applicationName"),
+//                            getString("read"));
+//                    String result = Defaults.osascript(cmd).trim();
+                    //setValue(convertFromString(result));
+                    break;
+            }
         }
     }
 
-    public abstract String convertToString(T value);
-
     public final void writeValue() {
-        String s = convertToString(getValue());
-        if (VALUEPROVIDER_DEFAULTS.equals(valueProvider)) {
-            Defaults.write(getPrimaryCategory(), getSecondaryCategory(), s);
-        } else if (VALUEPROVIDER_OSASCRIPT.equals(valueProvider)) {
-            // TODO: implement it
+        if (null != valueProvider) {
+            switch (valueProvider) {
+                case VALUEPROVIDER_DEFAULTS:
+                    Defaults.write(this);
+                    break;
+                case VALUEPROVIDER_OSASCRIPT:
+                    break;
+            }
         }
     }
 
