@@ -56,6 +56,6 @@ public class StringPlugin extends AbstractPlugin<String> {
 
     @Override
     public String convertToString(String value) {
-        return "-String " + value;
+        return "-string " + value;
     }
 }

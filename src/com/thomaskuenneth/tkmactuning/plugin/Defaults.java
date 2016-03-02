@@ -72,7 +72,9 @@ public final class Defaults {
     }
 
     public static void write(String domain, String key, String value) {
-        ProcessBuilder pb = new ProcessBuilder(CMD, "write", domain, key, value);
+        // FIXME: terrible workaround
+        String [] a = value.split(" ");
+        ProcessBuilder pb = new ProcessBuilder(CMD, "write", domain, key, a[0], a[1]);
         try {
             Process process = pb.start();
             process.waitFor();
