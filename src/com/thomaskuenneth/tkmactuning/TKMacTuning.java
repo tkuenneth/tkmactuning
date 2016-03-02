@@ -79,7 +79,8 @@ public class TKMacTuning extends Application {
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowHardDrivesOnDesktop"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowPathbar"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowStatusBar"},
-            {"com.thomaskuenneth.tkmactuning.plugin.OSAScriptPlugin", "desktop_wallpaper"}
+            {"com.thomaskuenneth.tkmactuning.plugin.ImageChooserPlugin", "desktop_wallpaper"},
+            {"com.thomaskuenneth.tkmactuning.plugin.DirChooserPlugin", "location"}
         };
         for (String[] data : plugins) {
             if (data.length != 2) {

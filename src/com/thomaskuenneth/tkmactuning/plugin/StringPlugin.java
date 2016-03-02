@@ -21,8 +21,7 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
- * This plugin provides access to string values in the Mac OS X Defaults
- * database.
+ * This plugin provides access to string values.
  *
  * @author Thomas Kuenneth
  */
@@ -35,7 +34,7 @@ public class StringPlugin extends AbstractPlugin<String> {
     }
 
     @Override
-    public final Class<String> getType() {
+    public Class<String> getType() {
         return String.class;
     }
 
@@ -50,12 +49,13 @@ public class StringPlugin extends AbstractPlugin<String> {
     }
 
     @Override
-    public void readValue() {
-        setValue(Defaults.readString(getPrimaryCategory(), getSecondaryCategory()));
+    public String convertFromString(String s) {
+        // already got a string, so no conversion is needed
+        return s;
     }
 
     @Override
-    public void writeValue() {
-        Defaults.write(getPrimaryCategory(), getSecondaryCategory(), getValue());
+    public String convertToString(String value) {
+        return "-String " + value;
     }
 }

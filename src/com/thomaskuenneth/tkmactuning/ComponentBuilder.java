@@ -22,7 +22,7 @@ package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin;
-import com.thomaskuenneth.tkmactuning.plugin.OSAScriptPlugin;
+import com.thomaskuenneth.tkmactuning.plugin.ImageChooserPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin;
 import java.util.Arrays;
 import javafx.geometry.Pos;
@@ -59,7 +59,7 @@ public class ComponentBuilder {
         } else if (plugin instanceof BooleanPlugin) {
             result = new CheckBox(shortDescription);
             PluginComponentConnector.connect(plugin, (CheckBox) result);
-        } else if (plugin instanceof OSAScriptPlugin) {
+        } else if (plugin instanceof ImageChooserPlugin) {
             HBox hbox = new HBox();
             hbox.setAlignment(Pos.TOP_LEFT);
             hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);

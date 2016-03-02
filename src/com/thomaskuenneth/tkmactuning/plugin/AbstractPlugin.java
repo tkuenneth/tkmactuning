@@ -23,63 +23,102 @@ package com.thomaskuenneth.tkmactuning.plugin;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
 
 /**
- * This is an abstract base class for plugins.
+ * This is the abstract base class for TKMacTuning-plugins. Plugins provide read
+ * and write access to a value of a given type. <code>getValue()</code> and
+ * <code>setValue()</code> always work on local copies of the value, which are
+ * obtained from an external source by invoking <code>readValue()</code> and can
+ * be stored externally with <code>writeValue()</code>. The external source is
+ * managed by a value provider. <br>
+ * Currently the value providers are hardcoded; this might change if needed.
  *
  * @author Thomas Kuenneth
  * @param <T> the type of the value being handled by the plugin
  */
-public abstract class AbstractPlugin<T> implements IFPlugin<T> {
-    
+public abstract class AbstractPlugin<T> {
+
     public static final String ROOT = "root";
 
+    private static final String VALUEPROVIDER_DEFAULTS = "com.thomaskuenneth.tkmactuning.plugin.DefaultsValueProvider";
+    private static final String VALUEPROVIDER_OSASCRIPT = "com.thomaskuenneth.tkmactuning.plugin.OSAScriptValueProvider";
+
     private final String pluginName;
+    private final String valueProvider;
 
     public AbstractPlugin(String pluginName) {
         this.pluginName = pluginName;
+        valueProvider = getString("valueprovider");
+        if (valueProvider == null) {
+            throw new RuntimeException("valueprovider not set");
+        }
         readValue();
     }
 
-    @Override
     public final String getShortDescription() {
         return getString("shortDescription");
     }
 
-    @Override
     public final String getLongDescription() {
         return getString("longDescription");
     }
 
-    @Override
     public final String getApplicationName() {
         return getString("applicationName");
     }
 
-    @Override
     public final String getPrimaryCategory() {
         return getString("primaryCategory");
     }
 
-    @Override
     public final String getSecondaryCategory() {
         return getString("secondaryCategory");
     }
 
-    @Override
-    public String getPrimaryUICategory() {
+    public final String getPrimaryUICategory() {
         String primaryUICategory = getString("primaryUICategory");
         if (primaryUICategory == null) {
             primaryUICategory = getApplicationName();
         }
         return primaryUICategory;
     }
-    
-    @Override
-    public String getSecondaryUICategory() {
+
+    public final String getSecondaryUICategory() {
         String secondaryUICategory = getString("secondaryUICategory");
         if (secondaryUICategory == null) {
             secondaryUICategory = ROOT;
         }
         return secondaryUICategory;
+    }
+
+    public abstract Class<T> getType();
+
+    public abstract T getValue();
+
+    public abstract void setValue(T value);
+
+    public abstract T convertFromString(String s);
+
+    public final void readValue() {
+        if (VALUEPROVIDER_DEFAULTS.equals(valueProvider)) {
+            String s = Defaults.read(getPrimaryCategory(), getSecondaryCategory());
+            setValue(convertFromString(s));
+        } else if (VALUEPROVIDER_OSASCRIPT.equals(valueProvider)) {
+            String cmd = String.format("tell application \"%s\" to %s",
+                    getString("applicationName"),
+                    getString("read"));
+            String result = Defaults.osascript(cmd).trim();
+            setValue(convertFromString(result));
+        }
+    }
+
+    public abstract String convertToString(T value);
+
+    public final void writeValue() {
+        String s = convertToString(getValue());
+        if (VALUEPROVIDER_DEFAULTS.equals(valueProvider)) {
+            Defaults.write(getPrimaryCategory(), getSecondaryCategory(), s);
+        } else if (VALUEPROVIDER_OSASCRIPT.equals(valueProvider)) {
+            // TODO: implement it
+        }
     }
 
     final String getString(String key) {

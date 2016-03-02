@@ -21,8 +21,7 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
- * This plugin provides access to boolean values in the Mac OS X Defaults
- * database.
+ * This plugin provides access to boolean values.
  *
  * @author Thomas Kuenneth
  */
@@ -50,12 +49,15 @@ public class BooleanPlugin extends AbstractPlugin<Boolean> {
     }
 
     @Override
-    public final void readValue() {
-        setValue(Defaults.readBoolean(getPrimaryCategory(), getSecondaryCategory()));
+    public Boolean convertFromString(String s) {
+        if (("1".equals(s)) || ("true".equalsIgnoreCase(s))) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     @Override
-    public final void writeValue() {
-        Defaults.write(getPrimaryCategory(), getSecondaryCategory(), getValue());
+    public String convertToString(Boolean value) {
+        return "-bool " + value.toString().toUpperCase();
     }
 }

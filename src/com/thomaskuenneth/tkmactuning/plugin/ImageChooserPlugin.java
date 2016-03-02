@@ -1,5 +1,5 @@
 /*
- * OSAScriptPlugin.java
+ * ImageChooserPlugin.java
  *
  * Copyright 2016 Thomas Kuenneth
  *
@@ -21,26 +21,14 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
- * This plugin provides access to string values via osascript.
+ * This plugin provides access to string values. Important: in this plugin the
+ * user does not enter strings but picks images stored in the file system
  *
  * @author Thomas Kuenneth
  */
-public class OSAScriptPlugin extends StringPlugin {
+public class ImageChooserPlugin extends StringPlugin {
 
-    public OSAScriptPlugin(String plugin) {
+    public ImageChooserPlugin(String plugin) {
         super(plugin);
-    }
-
-    @Override
-    public void readValue() {
-        String cmd = String.format("tell application \"%s\" to %s",
-                getString("applicationName"),
-                getString("read"));
-        String result = Defaults.osascript(cmd).trim();
-        setValue(result);
-    }
-
-    @Override
-    public void writeValue() {
     }
 }

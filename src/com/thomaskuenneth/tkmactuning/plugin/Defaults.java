@@ -59,19 +59,7 @@ public final class Defaults {
         LOGGER.log(Level.INFO, "appName={0} -> {1}", new Object[]{applicationName, result});
     }
 
-    public static Boolean readBoolean(String domain, String key) {
-        String result = read(domain, key);
-        if (("1".equals(result)) || ("true".equalsIgnoreCase(result))) {
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    public static String readString(String domain, String key) {
-        return read(domain, key);
-    }
-
-    private static String read(String domain, String key) {
+    public static String read(String domain, String key) {
         String result = "";
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
@@ -83,24 +71,15 @@ public final class Defaults {
         return result;
     }
 
-    public static void write(String domain, String key, Boolean value) {
-        write(domain, key, "-bool", value.toString().toUpperCase());
-    }
-
     public static void write(String domain, String key, String value) {
-        write(domain, key, "-string", value);
-    }
-
-    private static void write(String domain, String key, String type, String value) {
-        ProcessBuilder pb = new ProcessBuilder(CMD, "write", domain, key, type, value);
+        ProcessBuilder pb = new ProcessBuilder(CMD, "write", domain, key, value);
         try {
             Process process = pb.start();
             process.waitFor();
         } catch (InterruptedException | IOException ex) {
             LOGGER.log(Level.SEVERE, "exception while writing", ex);
         }
-        LOGGER.log(Level.INFO, "domain={0}, key={1}, type={2}, value={3}",
-                new Object[]{domain, key, type, value});
+        LOGGER.log(Level.INFO, "domain={0}, key={1}, value={2}", new Object[]{domain, key, value});
     }
 
     private static int start(ProcessBuilder pb, StringBuilder sbIS, StringBuilder sbES) {

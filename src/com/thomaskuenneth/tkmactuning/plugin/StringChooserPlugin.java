@@ -21,9 +21,8 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 /**
- * This plugin provides access to string values in the Mac OS X Defaults
- * database. Important: in this plugin the user does not enter strings but picks
- * one from a predefined list.
+ * This plugin provides access to string values. Important: in this plugin the
+ * user does not enter strings but picks one from a predefined list.
  *
  * @author Thomas Kuenneth
  */
