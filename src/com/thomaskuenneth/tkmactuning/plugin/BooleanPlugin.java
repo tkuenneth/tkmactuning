@@ -27,7 +27,7 @@ package com.thomaskuenneth.tkmactuning.plugin;
  */
 public class BooleanPlugin extends AbstractPlugin<Boolean> {
 
-    private Boolean value = Boolean.FALSE;
+    private Boolean value;
 
     public BooleanPlugin(String pluginName) {
         super(pluginName);
