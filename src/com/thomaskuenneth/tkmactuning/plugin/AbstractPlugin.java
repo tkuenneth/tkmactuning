@@ -102,11 +102,7 @@ public abstract class AbstractPlugin<T> {
                     Defaults.read(this);
                     break;
                 case VALUEPROVIDER_OSASCRIPT:
-//                    String cmd = String.format("tell application \"%s\" to %s",
-//                            getString("applicationName"),
-//                            getString("read"));
-//                    String result = Defaults.osascript(cmd).trim();
-                    //setValue(convertFromString(result));
+                    OSAScript.read(this);
                     break;
             }
         }

@@ -40,17 +40,6 @@ public final class Defaults {
     private Defaults() {
     }
 
-    public static String osascript(String script) {
-        StringBuilder sbIS = new StringBuilder();
-        StringBuilder sbES = new StringBuilder();
-        ProcessBuilder pb = new ProcessBuilder("/usr/bin/osascript", "-e", script);
-        int result = start(pb, sbIS, sbES);
-        if (result != 0) {
-            LOGGER.log(Level.INFO, sbES.toString());
-        }
-        return sbIS.toString();
-    }
-
     public static void killall(String applicationName) {
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
@@ -68,9 +57,10 @@ public final class Defaults {
         ProcessBuilder pb = new ProcessBuilder(CMD, "read", domain, key);
         if (start(pb, sbIS, sbES) == 0) {
             result = sbIS.toString().trim();
-            if (String.class.equals(plugin.getType())) {
+            final Class type = plugin.getType();
+            if (String.class.equals(type)) {
                 plugin.setValue(result);
-            } else if (Boolean.class.equals(plugin.getType())) {
+            } else if (Boolean.class.equals(type)) {
                 plugin.setValue("1".equals(result) || "true".equalsIgnoreCase(result));
             }
         }
@@ -82,10 +72,11 @@ public final class Defaults {
         String key = plugin.getSecondaryCategory();
         String type = null;
         String value = null;
-        if (String.class.equals(plugin.getType())) {
+        final Class type1 = plugin.getType();
+        if (String.class.equals(type1)) {
             type = "-string";
             value = plugin.getValue().toString();
-        } else if (Boolean.class.equals(plugin.getType())) {
+        } else if (Boolean.class.equals(type1)) {
             type = "-bool";
             value = Boolean.TRUE.equals(plugin.getValue()) ? "TRUE" : "FALSE";
         }
@@ -100,7 +91,7 @@ public final class Defaults {
                 new Object[]{domain, key, type, value});
     }
 
-    private static int start(ProcessBuilder pb, StringBuilder sbIS, StringBuilder sbES) {
+    public static int start(ProcessBuilder pb, StringBuilder sbIS, StringBuilder sbES) {
         int exit = 1;
         try {
             Process p = pb.start();

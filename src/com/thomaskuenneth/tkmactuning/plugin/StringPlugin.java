@@ -27,7 +27,7 @@ package com.thomaskuenneth.tkmactuning.plugin;
  */
 public class StringPlugin extends AbstractPlugin<String> {
 
-    private String value;
+    private String value = "";
 
     public StringPlugin(String plugin) {
         super(plugin);
