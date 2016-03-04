@@ -21,7 +21,6 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
-import com.thomaskuenneth.tkmactuning.PluginComponentConnector;
 import java.util.Arrays;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -69,7 +68,6 @@ public class StringChooserPlugin extends StringPlugin {
         combobox.setOnAction(event -> {
             setValue((String) combobox.getValue());
         });
-        PluginComponentConnector.register(this, combobox);
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.BASELINE_LEFT);
         hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);

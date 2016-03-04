@@ -20,6 +20,7 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.PluginComponentConnector;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import javafx.scene.Node;
 
@@ -47,7 +48,7 @@ public abstract class AbstractPlugin<T> {
     private final String pluginName;
     private final String valueProvider;
 
-    private Node node;
+    protected Node node;
 
     public AbstractPlugin(String pluginName) {
         this.pluginName = pluginName;
@@ -61,6 +62,7 @@ public abstract class AbstractPlugin<T> {
     private void initialize() {
         node = createNode();
         readValue();
+        PluginComponentConnector.register(this);
     }
 
     public final String getShortDescription() {

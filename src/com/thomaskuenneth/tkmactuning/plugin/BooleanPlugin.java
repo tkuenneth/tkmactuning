@@ -20,7 +20,6 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
-import com.thomaskuenneth.tkmactuning.PluginComponentConnector;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 
@@ -59,7 +58,6 @@ public class BooleanPlugin extends AbstractPlugin<Boolean> {
         checkbox.setOnAction((event) -> {
             setValue(checkbox.isSelected());
         });
-        PluginComponentConnector.register(this, checkbox);
         return checkbox;
     }
 

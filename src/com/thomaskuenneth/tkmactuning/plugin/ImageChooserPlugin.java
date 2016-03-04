@@ -21,7 +21,6 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
-import com.thomaskuenneth.tkmactuning.PluginComponentConnector;
 import java.io.File;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -59,7 +58,6 @@ public class ImageChooserPlugin extends StringPlugin {
         imageview.setPreserveRatio(true);
         label.setLabelFor(imageview);
         hbox.getChildren().add(imageview);
-        PluginComponentConnector.register(this, imageview);
         return hbox;
     }
 

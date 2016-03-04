@@ -24,7 +24,6 @@ import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.Defaults;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.scene.Node;
 
 /**
  * This class connects plugins to controls.
@@ -33,10 +32,10 @@ import javafx.scene.Node;
  */
 public class PluginComponentConnector {
 
-    private static final Map<AbstractPlugin, Node> M = new HashMap();
+    private static final Map<AbstractPlugin, Boolean> M = new HashMap();
 
-    public static void register(AbstractPlugin plugin, Node node) {
-        M.put(plugin, node);
+    public static void register(AbstractPlugin plugin) {
+        M.put(plugin, Boolean.TRUE);
     }
 
     /**

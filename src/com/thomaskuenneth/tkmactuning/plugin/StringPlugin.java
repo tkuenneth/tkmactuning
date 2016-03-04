@@ -62,6 +62,9 @@ public class StringPlugin extends AbstractPlugin<String> {
         hbox.setAlignment(Pos.BASELINE_LEFT);
         hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);
         textfield = new TextField();
+        textfield.setOnKeyTyped(event -> {
+            setValue(textfield.getText());
+        });
         final Label label = new Label(getShortDescription());
         label.setLabelFor(textfield);
         hbox.getChildren().add(label);
