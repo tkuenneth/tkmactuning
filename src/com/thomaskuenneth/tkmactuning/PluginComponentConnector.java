@@ -22,14 +22,9 @@ package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.Defaults;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  * This class connects plugins to controls.
@@ -40,38 +35,8 @@ public class PluginComponentConnector {
 
     private static final Map<AbstractPlugin, Node> M = new HashMap();
 
-    /**
-     * Connect a plugin to a checkbox.
-     *
-     * @param plugin plugin
-     * @param checkbox checkbox
-     */
-    public static void connect(final AbstractPlugin plugin, CheckBox checkbox) {
-        updateCheckBox(plugin, checkbox);
-        checkbox.setOnAction((event) -> {
-            plugin.setValue(checkbox.isSelected());
-        });
-        M.put(plugin, checkbox);
-    }
-
-    /**
-     * Connect a plugin to a combobox.
-     *
-     * @param plugin plugin
-     * @param combobox combobox
-     */
-    public static void connect(final AbstractPlugin plugin, ComboBox combobox) {
-        updateComboBox(plugin, combobox);
-        combobox.setOnAction(event -> {
-            plugin.setValue(combobox.getValue());
-        });
-        M.put(plugin, combobox);
-    }
-
-    public static void connect(final AbstractPlugin plugin, ImageView imageview) {
-        updateImageView(plugin, imageview);
-        // FIXME: react upon actions
-        M.put(plugin, imageview);
+    public static void register(AbstractPlugin plugin, Node node) {
+        M.put(plugin, node);
     }
 
     /**
@@ -98,30 +63,6 @@ public class PluginComponentConnector {
     public static void reset() {
         M.keySet().stream().forEach((plugin) -> {
             plugin.readValue();
-            Node node = M.get(plugin);
-            if (node instanceof CheckBox) {
-                updateCheckBox(plugin, (CheckBox) node);
-            } else if (node instanceof ComboBox) {
-                updateComboBox(plugin, (ComboBox) node);
-            } else if (node instanceof ImageView) {
-                updateImageView(plugin, (ImageView) node);
-            }
         });
-    }
-
-    private static void updateCheckBox(final AbstractPlugin plugin, CheckBox checkbox) {
-        checkbox.setSelected((boolean) plugin.getValue());
-    }
-
-    private static void updateComboBox(final AbstractPlugin plugin, ComboBox combobox) {
-        combobox.setValue(plugin.getValue());
-    }
-
-    private static void updateImageView(final AbstractPlugin plugin, ImageView imageview) {
-        String value = (String) plugin.getValue();
-        if (value != null) {
-            Image i = new Image(new File(value).toURI().toString(), 100, 100, true, true);
-            imageview.setImage(i);
-        }
     }
 }

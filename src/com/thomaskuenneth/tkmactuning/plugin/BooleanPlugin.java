@@ -20,6 +20,10 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.PluginComponentConnector;
+import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+
 /**
  * This plugin provides access to boolean values.
  *
@@ -28,6 +32,7 @@ package com.thomaskuenneth.tkmactuning.plugin;
 public class BooleanPlugin extends AbstractPlugin<Boolean> {
 
     private Boolean value;
+    private CheckBox checkbox;
 
     public BooleanPlugin(String pluginName) {
         super(pluginName);
@@ -46,5 +51,22 @@ public class BooleanPlugin extends AbstractPlugin<Boolean> {
     @Override
     public final void setValue(Boolean value) {
         this.value = value;
+    }
+
+    @Override
+    public Node createNode() {
+        checkbox = new CheckBox(getShortDescription());
+        checkbox.setOnAction((event) -> {
+            setValue(checkbox.isSelected());
+        });
+        PluginComponentConnector.register(this, checkbox);
+        return checkbox;
+    }
+
+    @Override
+    public void updateNode() {
+        if (getValue() != null) {
+            checkbox.setSelected(getValue());
+        }
     }
 }

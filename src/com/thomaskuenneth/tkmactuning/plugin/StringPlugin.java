@@ -20,31 +20,57 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.LayoutConstants;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+
 /**
  * This plugin provides access to string values.
  *
  * @author Thomas Kuenneth
  */
 public class StringPlugin extends AbstractPlugin<String> {
-
+    
     private String value;
-
+    private TextField textfield;
+    
     public StringPlugin(String plugin) {
         super(plugin);
     }
-
+    
     @Override
     public Class<String> getType() {
         return String.class;
     }
-
+    
     @Override
     public final String getValue() {
         return value;
     }
-
+    
     @Override
     public final void setValue(String value) {
         this.value = value;
+    }
+    
+    @Override
+    public Node createNode() {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.BASELINE_LEFT);
+        hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);
+        textfield = new TextField();
+        final Label label = new Label(getShortDescription());
+        label.setLabelFor(textfield);
+        hbox.getChildren().add(label);
+        hbox.getChildren().add(textfield);
+        return hbox;
+    }
+    
+    @Override
+    public void updateNode() {
+        textfield.setText(getValue());
     }
 }

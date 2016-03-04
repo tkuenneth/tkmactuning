@@ -20,6 +20,15 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.LayoutConstants;
+import com.thomaskuenneth.tkmactuning.PluginComponentConnector;
+import java.util.Arrays;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
 /**
  * This plugin provides access to string values. Important: in this plugin the
  * user does not enter strings but picks one from a predefined list. List items
@@ -28,6 +37,8 @@ package com.thomaskuenneth.tkmactuning.plugin;
  * @author Thomas Kuenneth
  */
 public class StringChooserPlugin extends StringPlugin {
+
+    private ComboBox combobox;
 
     public StringChooserPlugin(String plugin) {
         super(plugin);
@@ -38,7 +49,7 @@ public class StringChooserPlugin extends StringPlugin {
      *
      * @return a list of predefined strings
      */
-    public String[] getValues() {
+    public final String[] getValues() {
         String values = getString("values");
         if (values != null) {
             String[] possibleValues = values.split("\\|");
@@ -48,5 +59,29 @@ public class StringChooserPlugin extends StringPlugin {
             return possibleValues;
         }
         return null;
+    }
+
+    @Override
+    public Node createNode() {
+        String[] possibleValues = getValues();
+        combobox = new ComboBox();
+        combobox.getItems().addAll(Arrays.asList(possibleValues));
+        combobox.setOnAction(event -> {
+            setValue((String) combobox.getValue());
+        });
+        PluginComponentConnector.register(this, combobox);
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.BASELINE_LEFT);
+        hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);
+        final Label label = new Label(getShortDescription());
+        label.setLabelFor(combobox);
+        hbox.getChildren().add(label);
+        hbox.getChildren().add(combobox);
+        return hbox;
+    }
+
+    @Override
+    public void updateNode() {
+        combobox.setValue(getValue());
     }
 }

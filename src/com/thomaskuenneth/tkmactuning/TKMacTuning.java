@@ -155,7 +155,7 @@ public class TKMacTuning extends Application {
                 tab.setContent(content);
             }
             VBox content = (VBox) tab.getContent();
-            Node node = ComponentBuilder.createComponent(plugin);
+            Node node = plugin.getNode();
             if (node != null) {
                 String secondaryUICategory = plugin.getSecondaryUICategory();
                 if (AbstractPlugin.ROOT.equals(secondaryUICategory)) {

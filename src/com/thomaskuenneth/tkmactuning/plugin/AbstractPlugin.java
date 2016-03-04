@@ -21,15 +21,18 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
+import javafx.scene.Node;
 
 /**
- * This is the abstract base class for TKMacTuning-plugins. Plugins provide read
- * and write access to a value of a given type. <code>getValue()</code> and
- * <code>setValue()</code> always work on local copies of the value, which are
- * obtained from an external source by invoking <code>readValue()</code> and can
- * be stored externally with <code>writeValue()</code>. The external source is
- * managed by a value provider. <br>
- * Currently the value providers are hardcoded; this might change if needed.
+ * This is the abstract base class for TKMacTuning-plugins. Plugins provide
+ * read/write access to a value of a given type. <code>getValue()</code> and
+ * <code>setValue()</code> work on local copies of the value. The local copy is
+ * obtained from an external source by invoking <code>readValue()</code>. It is
+ * stored externally by invoking <code>writeValue()</code>. The external source
+ * is managed by a value provider. Currently the value providers are hardcoded.
+ * <br>Which data is handled by the plugin is defined by the <em>plugin
+ * name</em>. It is used as a key to a configuration which currently resides in
+ * TKMacTuning.properties.
  *
  * @author Thomas Kuenneth
  * @param <T> the type of the value being handled by the plugin
@@ -44,12 +47,19 @@ public abstract class AbstractPlugin<T> {
     private final String pluginName;
     private final String valueProvider;
 
+    private Node node;
+
     public AbstractPlugin(String pluginName) {
         this.pluginName = pluginName;
         valueProvider = getString("valueprovider");
         if (valueProvider == null) {
             throw new RuntimeException("valueprovider not set");
         }
+        initialize();
+    }
+
+    private void initialize() {
+        node = createNode();
         readValue();
     }
 
@@ -95,6 +105,11 @@ public abstract class AbstractPlugin<T> {
 
     public abstract void setValue(T value);
 
+    /**
+     * Reads the value from an external source using the configured value
+     * provider. Afterwards the ui is updated by calling
+     * <code>updateNode()</code>.
+     */
     public final void readValue() {
         if (null != valueProvider) {
             switch (valueProvider) {
@@ -106,8 +121,13 @@ public abstract class AbstractPlugin<T> {
                     break;
             }
         }
+        updateNode();
     }
 
+    /**
+     * Writes the value to an external source using the configured value
+     * provider.
+     */
     public final void writeValue() {
         if (null != valueProvider) {
             switch (valueProvider) {
@@ -119,6 +139,27 @@ public abstract class AbstractPlugin<T> {
             }
         }
     }
+
+    /**
+     * Returns the ui that represents the plugin.
+     *
+     * @return ui that represents the plugin
+     */
+    public final Node getNode() {
+        return node;
+    }
+
+    /**
+     * Creates the ui that represents the plugin.
+     *
+     * @return ui that represents the plugin
+     */
+    public abstract Node createNode();
+
+    /**
+     * This method is called when the plugin should update its ui.
+     */
+    public abstract void updateNode();
 
     final String getString(String key) {
         String result = TKMacTuning.getString(pluginName + "." + key);
