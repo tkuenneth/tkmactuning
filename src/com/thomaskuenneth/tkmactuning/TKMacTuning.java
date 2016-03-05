@@ -73,6 +73,7 @@ public class TKMacTuning extends Application {
         tabPane.getStyleClass().add("floating");
 
         String[][] plugins = new String[][]{
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "disableHotPlug"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "disable-shadow"},
             {"com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin", "screencapture_type"},
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "AppleShowAllFiles"},

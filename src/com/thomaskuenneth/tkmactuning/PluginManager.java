@@ -46,7 +46,8 @@ public class PluginManager {
     public static void save() {
         HashMap<String, Boolean> map = new HashMap<>();
         L.stream().forEach((plugin) -> {
-            if (!plugin.getLastRead().equals(plugin.getValue())) {
+            final Object lastRead = plugin.getLastRead();
+            if ((lastRead == null) || (!lastRead.equals(plugin.getValue()))) {
                 String applicationName = plugin.getApplicationName();
                 if (!map.containsKey(applicationName)) {
                     map.put(applicationName, true);
