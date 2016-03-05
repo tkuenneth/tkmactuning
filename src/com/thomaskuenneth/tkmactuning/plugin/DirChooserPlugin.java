@@ -29,7 +29,8 @@ import javafx.stage.DirectoryChooser;
 
 /**
  * This plugin provides access to string values. The string is interpreted as a
- * path name.
+ * path name. The plugin can be configured to append the file separator string
+ * by setting the configuration key named separator to true.
  *
  * @author Thomas Kuenneth
  */
@@ -40,6 +41,17 @@ public class DirChooserPlugin extends StringPlugin {
     }
     
     @Override
+    public void setValue(String value) {
+        String separator = getString("separator");
+        if ((separator != null) && ("true".equalsIgnoreCase(separator))) {
+            if (!value.endsWith(File.separator)) {
+                value += File.separator;
+            }
+        }
+        super.setValue(value);
+    }
+
+    @Override
     public Node createNode() {
         node = super.createNode();
         Button button = new Button(TKMacTuning.getString("browse"));
@@ -48,9 +60,6 @@ public class DirChooserPlugin extends StringPlugin {
             File f = ch.showDialog(null);
             if (f != null) {
                 String newValue = f.getAbsolutePath();
-                if (!newValue.endsWith(File.separator)) {
-                    newValue += File.separator;
-                }
                 setValue(newValue);
                 updateNode();
             }

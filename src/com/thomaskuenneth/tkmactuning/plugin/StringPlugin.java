@@ -28,7 +28,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 /**
- * This plugin provides access to string values.
+ * This plugin provides access to string values. The length of the text field
+ * can be controlled with a configuration key named columns.
  *
  * @author Thomas Kuenneth
  */
@@ -52,7 +53,7 @@ public class StringPlugin extends AbstractPlugin<String> {
     }
     
     @Override
-    public final void setValue(String value) {
+    public void setValue(String value) {
         this.value = value;
     }
     
@@ -62,6 +63,10 @@ public class StringPlugin extends AbstractPlugin<String> {
         hbox.setAlignment(Pos.BASELINE_LEFT);
         hbox.setSpacing(LayoutConstants.LABEL_CONTROL_GAP);
         textfield = new TextField();
+        String columns = getString("columns");
+        if ((columns != null) && (columns.length() > 0)) {
+            textfield.setPrefColumnCount(Integer.parseInt(columns));
+        }
         textfield.setOnKeyTyped(event -> {
             setValue(textfield.getText());
         });
