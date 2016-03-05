@@ -94,11 +94,11 @@ public class TKMacTuning extends Application {
         buttonsPane.setPadding(LayoutConstants.PADDING_1);
         buttonsPane.setHgap(LayoutConstants.HORIZONTAL_CONTROL_GAP);
         buttonsPane.setAlignment(Pos.BASELINE_LEFT);
-        final Button buttonReset = new Button(getString("reset"));
-        buttonReset.setOnAction(event -> {
-            PluginManager.reset();
+        final Button buttonReread = new Button(getString("reread"));
+        buttonReread.setOnAction(event -> {
+            PluginManager.reread();
         });
-        buttonsPane.getChildren().add(buttonReset);
+        buttonsPane.getChildren().add(buttonReread);
         final Button buttonApply = new Button(getString("apply"));
         buttonApply.setOnAction(event -> {
             PluginManager.save();

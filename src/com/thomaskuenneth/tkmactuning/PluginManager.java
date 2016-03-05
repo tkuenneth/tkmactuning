@@ -60,9 +60,9 @@ public class PluginManager {
     }
 
     /**
-     * Resets the ui to the last saved values.
+     * Rereads the values and updates the ui.
      */
-    public static void reset() {
+    public static void reread() {
         L.stream().forEach((plugin) -> {
             plugin.readValue();
         });
