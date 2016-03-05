@@ -51,20 +51,28 @@ public final class Defaults {
     public static void read(AbstractPlugin plugin) {
         String domain = plugin.getPrimaryCategory();
         String key = plugin.getSecondaryCategory();
+        String def = plugin.getString("default");
+        if (def != null) {
+            setValue(plugin, def);
+        }
         String result = null;
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
         ProcessBuilder pb = new ProcessBuilder(CMD, "read", domain, key);
         if (start(pb, sbIS, sbES) == 0) {
             result = sbIS.toString().trim();
-            final Class type = plugin.getType();
-            if (String.class.equals(type)) {
-                plugin.setValue(result);
-            } else if (Boolean.class.equals(type)) {
-                plugin.setValue("1".equals(result) || "true".equalsIgnoreCase(result));
-            }
+            setValue(plugin, result);
         }
         LOGGER.log(Level.INFO, "domain={0}, key={1} -> {2}", new Object[]{domain, key, result});
+    }
+    
+    private static void setValue(AbstractPlugin plugin, String data) {
+        final Class type = plugin.getType();
+        if (String.class.equals(type)) {
+            plugin.setValue(data);
+        } else if (Boolean.class.equals(type)) {
+            plugin.setValue("1".equals(data) || "true".equalsIgnoreCase(data));
+        }
     }
 
     public static void write(AbstractPlugin plugin) {

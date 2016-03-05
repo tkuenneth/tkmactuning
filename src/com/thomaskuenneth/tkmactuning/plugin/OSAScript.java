@@ -55,6 +55,7 @@ public class OSAScript {
                 throw new RuntimeException("not implemented yet");
             }
         } else {
+            // FIXME: react to default valze if it was set
             LOGGER.log(Level.SEVERE, sbES.toString());
         }
     }

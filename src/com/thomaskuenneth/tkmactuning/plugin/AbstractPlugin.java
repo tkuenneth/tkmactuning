@@ -50,7 +50,7 @@ public abstract class AbstractPlugin<T> {
 
     protected Node node;
     
-    private T lastRead;
+    private T lastReadOrWritten;
 
     public AbstractPlugin(String pluginName) {
         this.pluginName = pluginName;
@@ -108,9 +108,15 @@ public abstract class AbstractPlugin<T> {
     public abstract T getValue();
 
     public abstract void setValue(T value);
-    
-    public final T getLastRead() {
-        return lastRead;
+
+    /**
+     * Returns the value that was last read from or written to the value
+     * provider.
+     *
+     * @return value that was last read from or written to the value provider
+     */
+    public final T getLastReadOrWritten() {
+        return lastReadOrWritten;
     }
 
     /**
@@ -129,7 +135,7 @@ public abstract class AbstractPlugin<T> {
                     break;
             }
         }
-        lastRead = getValue();
+        lastReadOrWritten = getValue();
         updateNode();
     }
 
@@ -147,6 +153,7 @@ public abstract class AbstractPlugin<T> {
                     break;
             }
         }
+        lastReadOrWritten = getValue();
     }
 
     /**
