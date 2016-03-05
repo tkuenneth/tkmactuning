@@ -1,5 +1,5 @@
 /*
- * PluginComponentConnector.java
+ * PluginManager.java
  *
  * Copyright 2008 - 2016 Thomas Kuenneth
  *
@@ -22,34 +22,37 @@ package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import com.thomaskuenneth.tkmactuning.plugin.Defaults;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
- * This class connects plugins to controls.
+ * This class manages plugins.
  *
  * @author Thomas Kuenneth
  */
-public class PluginComponentConnector {
+public class PluginManager {
 
-    private static final Map<AbstractPlugin, Boolean> M = new HashMap();
+    private static final List<AbstractPlugin> L = new ArrayList<>();
 
     public static void register(AbstractPlugin plugin) {
-        M.put(plugin, Boolean.TRUE);
+        L.add(plugin);
     }
 
     /**
-     * Saves the current plugin state and kills the corresponding apps.
+     * If the current plugin value differs from the last read value, save the
+     * new value and kill the corresponding app.
      */
     public static void save() {
-        // TODO: check if the state has changed; if not, app does not need to be killed
         HashMap<String, Boolean> map = new HashMap<>();
-        M.keySet().stream().forEach((plugin) -> {
-            String applicationName = plugin.getApplicationName();
-            if (!map.containsKey(applicationName)) {
-                map.put(applicationName, true);
+        L.stream().forEach((plugin) -> {
+            if (!plugin.getLastRead().equals(plugin.getValue())) {
+                String applicationName = plugin.getApplicationName();
+                if (!map.containsKey(applicationName)) {
+                    map.put(applicationName, true);
+                }
+                plugin.writeValue();
             }
-            plugin.writeValue();
         });
         map.keySet().stream().forEach((String applicationName) -> {
             Defaults.killall(applicationName);
@@ -60,7 +63,7 @@ public class PluginComponentConnector {
      * Resets the ui to the last saved values.
      */
     public static void reset() {
-        M.keySet().stream().forEach((plugin) -> {
+        L.stream().forEach((plugin) -> {
             plugin.readValue();
         });
     }

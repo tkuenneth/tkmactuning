@@ -96,12 +96,12 @@ public class TKMacTuning extends Application {
         buttonsPane.setAlignment(Pos.BASELINE_LEFT);
         final Button buttonReset = new Button(getString("reset"));
         buttonReset.setOnAction(event -> {
-            PluginComponentConnector.reset();
+            PluginManager.reset();
         });
         buttonsPane.getChildren().add(buttonReset);
         final Button buttonApply = new Button(getString("apply"));
         buttonApply.setOnAction(event -> {
-            PluginComponentConnector.save();
+            PluginManager.save();
         });
         buttonsPane.getChildren().add(buttonApply);
 

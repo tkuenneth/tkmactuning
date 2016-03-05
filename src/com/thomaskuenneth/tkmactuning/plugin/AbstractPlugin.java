@@ -20,7 +20,7 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
-import com.thomaskuenneth.tkmactuning.PluginComponentConnector;
+import com.thomaskuenneth.tkmactuning.PluginManager;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import javafx.scene.Node;
 
@@ -49,6 +49,8 @@ public abstract class AbstractPlugin<T> {
     private final String valueProvider;
 
     protected Node node;
+    
+    private T lastRead;
 
     public AbstractPlugin(String pluginName) {
         this.pluginName = pluginName;
@@ -62,7 +64,7 @@ public abstract class AbstractPlugin<T> {
     private void initialize() {
         node = createNode();
         readValue();
-        PluginComponentConnector.register(this);
+        PluginManager.register(this);
     }
 
     public final String getShortDescription() {
@@ -106,6 +108,10 @@ public abstract class AbstractPlugin<T> {
     public abstract T getValue();
 
     public abstract void setValue(T value);
+    
+    public final T getLastRead() {
+        return lastRead;
+    }
 
     /**
      * Reads the value from an external source using the configured value
@@ -123,6 +129,7 @@ public abstract class AbstractPlugin<T> {
                     break;
             }
         }
+        lastRead = getValue();
         updateNode();
     }
 
