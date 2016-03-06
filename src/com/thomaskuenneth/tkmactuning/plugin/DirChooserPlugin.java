@@ -20,12 +20,14 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.JavaFXUtils;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import java.io.File;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 
 /**
  * This plugin provides access to string values. The string is interpreted as a
@@ -57,7 +59,13 @@ public class DirChooserPlugin extends StringPlugin {
         Button button = new Button(TKMacTuning.getString("browse"));
         button.setOnAction(event -> {
             DirectoryChooser ch = new DirectoryChooser();
-            File f = ch.showDialog(null);
+            String value = getValue();
+            if (value != null) {
+                File dir = new File(value);
+                ch.setInitialDirectory(dir);
+            }
+            Window w = JavaFXUtils.getWindow(event.getSource());
+            File f = ch.showDialog(w);
             if (f != null) {
                 String newValue = f.getAbsolutePath();
                 setValue(newValue);
