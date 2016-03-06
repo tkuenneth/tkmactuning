@@ -67,8 +67,8 @@ public class StringPlugin extends AbstractPlugin<String> {
         if ((columns != null) && (columns.length() > 0)) {
             textfield.setPrefColumnCount(Integer.parseInt(columns));
         }
-        textfield.setOnKeyTyped(event -> {
-            setValue(textfield.getText());
+        textfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            setValue(newValue);
         });
         final Label label = new Label(getShortDescription());
         label.setLabelFor(textfield);
