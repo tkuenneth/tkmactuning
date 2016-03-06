@@ -27,7 +27,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Window;
 
 /**
  * This plugin provides access to string values. The string is interpreted as a
@@ -43,14 +42,20 @@ public class DirChooserPlugin extends StringPlugin {
     }
     
     @Override
-    public void setValue(String value) {
+    public void preWriteValue() {
         String separator = getString("separator");
         if ((separator != null) && ("true".equalsIgnoreCase(separator))) {
+            String value = getValue();
             if (!value.endsWith(File.separator)) {
                 value += File.separator;
+                setValue(value);
+                updateNode();
             }
         }
-        super.setValue(value);
+        File dir = getValueAsFile();
+        if (dir != null) {
+            dir.mkdirs();
+        }
     }
 
     @Override
@@ -59,13 +64,8 @@ public class DirChooserPlugin extends StringPlugin {
         Button button = new Button(TKMacTuning.getString("browse"));
         button.setOnAction(event -> {
             DirectoryChooser ch = new DirectoryChooser();
-            String value = getValue();
-            if (value != null) {
-                File dir = new File(value);
-                ch.setInitialDirectory(dir);
-            }
-            Window w = JavaFXUtils.getWindow(event.getSource());
-            File f = ch.showDialog(w);
+            ch.setInitialDirectory(getValueAsFile());
+            File f = ch.showDialog(JavaFXUtils.getWindow(event.getSource()));
             if (f != null) {
                 String newValue = f.getAbsolutePath();
                 setValue(newValue);
@@ -77,5 +77,14 @@ public class DirChooserPlugin extends StringPlugin {
             hbox.getChildren().add(button);
         }
         return node;
+    }
+    
+    private File getValueAsFile() {
+        File f = null;
+        String value = getValue();
+        if (value != null) {
+            f = new File(value);
+        }
+        return f;
     }
 }

@@ -144,6 +144,7 @@ public abstract class AbstractPlugin<T> {
      * provider.
      */
     public final void writeValue() {
+        preWriteValue();
         if (null != valueProvider) {
             switch (valueProvider) {
                 case VALUEPROVIDER_DEFAULTS:
@@ -154,6 +155,13 @@ public abstract class AbstractPlugin<T> {
             }
         }
         lastReadOrWritten = getValue();
+    }
+    
+    /**
+     * Can be overridden if something needs to be done before writing the value
+     */
+    public void preWriteValue() {
+        // intentionally does nothing
     }
 
     /**
