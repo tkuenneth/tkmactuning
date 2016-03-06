@@ -84,7 +84,8 @@ public class TKMacTuning extends Application {
             {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowStatusBar"},
             {"com.thomaskuenneth.tkmactuning.plugin.ImageChooserPlugin", "desktop_wallpaper"},
             {"com.thomaskuenneth.tkmactuning.plugin.DirChooserPlugin", "location"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "DisableInlineAttachmentViewing"}
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "DisableInlineAttachmentViewing"},
+            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "AppStoreShowDebugMenu"}
         };
         for (String[] data : plugins) {
             if (data.length != 2) {
