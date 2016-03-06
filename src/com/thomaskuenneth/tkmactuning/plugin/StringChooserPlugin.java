@@ -21,6 +21,7 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
+import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import java.util.Arrays;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -39,8 +40,8 @@ public class StringChooserPlugin extends StringPlugin {
 
     private ComboBox combobox;
 
-    public StringChooserPlugin(String plugin) {
-        super(plugin);
+    public StringChooserPlugin(TKMacTuning app, String plugin) {
+        super(app, plugin);
     }
 
     /**

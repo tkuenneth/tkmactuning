@@ -51,10 +51,11 @@ import javafx.stage.Stage;
 public class TKMacTuning extends Application {
 
     private static final Logger LOGGER = Logger.getLogger(TKMacTuning.class.getName());
-    private static final TKMacTuning INSTANCE = new TKMacTuning();
     private static final String GROUP = "group_";
 
     private final Properties p;
+
+    private StatusBar statusbar;
 
     public TKMacTuning() {
         p = new Properties();
@@ -108,9 +109,7 @@ public class TKMacTuning extends Application {
         });
         buttonsPane.getChildren().add(buttonApply);
 
-        HBox statusbar = new HBox();
-        statusbar.getChildren().add(new Label("TODO: set it up"));
-
+        statusbar = new StatusBar();
         BorderPane borderPane = new BorderPane(tabPane);
         borderPane.setTop(buttonsPane);
         borderPane.setBottom(statusbar);
@@ -132,21 +131,25 @@ public class TKMacTuning extends Application {
         launch(args);
     }
 
+    public StatusBar getStatusBar() {
+        return statusbar;
+    }
+
     /**
      * Gets a string from TKMacTuning.properties.
      *
      * @param key key
      * @return a string from TKMacTuning.properties
      */
-    public static String getString(String key) {
-        return INSTANCE.p.getProperty(key);
+    public String getString(String key) {
+        return p.getProperty(key);
     }
 
     private void addPlugin(TabPane tabPane, String className, String pluginName) {
         try {
             Class clazz = Class.forName(className);
-            Constructor cons = clazz.getConstructor(String.class);
-            AbstractPlugin plugin = (AbstractPlugin) cons.newInstance(pluginName);
+            Constructor cons = clazz.getConstructor(TKMacTuning.class, String.class);
+            AbstractPlugin plugin = (AbstractPlugin) cons.newInstance(this, pluginName);
             String primaryUICategory = plugin.getPrimaryUICategory();
             Tab tab = (Tab) tabPane.getProperties().get(primaryUICategory);
             if (tab == null) {

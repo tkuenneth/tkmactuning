@@ -45,6 +45,8 @@ public abstract class AbstractPlugin<T> {
     private static final String VALUEPROVIDER_DEFAULTS = "com.thomaskuenneth.tkmactuning.plugin.DefaultsValueProvider";
     private static final String VALUEPROVIDER_OSASCRIPT = "com.thomaskuenneth.tkmactuning.plugin.OSAScriptValueProvider";
 
+    protected final TKMacTuning app;
+    
     private final String pluginName;
     private final String valueProvider;
 
@@ -52,7 +54,8 @@ public abstract class AbstractPlugin<T> {
     
     private T lastReadOrWritten;
 
-    public AbstractPlugin(String pluginName) {
+    public AbstractPlugin(TKMacTuning app, String pluginName) {
+        this.app = app;
         this.pluginName = pluginName;
         valueProvider = getString("valueprovider");
         if (valueProvider == null) {
@@ -186,9 +189,9 @@ public abstract class AbstractPlugin<T> {
     public abstract void updateNode();
 
     final String getString(String key) {
-        String result = TKMacTuning.getString(pluginName + "." + key);
+        String result = app.getString(pluginName + "." + key);
         if ((result != null) && (result.startsWith("$$$"))) {
-            result = TKMacTuning.getString(result);
+            result = app.getString(result);
         }
         return result;
     }

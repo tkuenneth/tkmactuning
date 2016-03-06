@@ -37,8 +37,8 @@ import javafx.stage.DirectoryChooser;
  */
 public class DirChooserPlugin extends StringPlugin {
     
-    public DirChooserPlugin(String plugin) {
-        super(plugin);
+    public DirChooserPlugin(TKMacTuning app, String plugin) {
+        super(app, plugin);
     }
     
     @Override
@@ -56,12 +56,13 @@ public class DirChooserPlugin extends StringPlugin {
         if (dir != null) {
             dir.mkdirs();
         }
+        app.getStatusBar().setMainText(dir.getAbsolutePath());
     }
 
     @Override
     public Node createNode() {
         node = super.createNode();
-        Button button = new Button(TKMacTuning.getString("browse"));
+        Button button = new Button(app.getString("browse"));
         button.setOnAction(event -> {
             DirectoryChooser ch = new DirectoryChooser();
             ch.setInitialDirectory(getValueAsFile());

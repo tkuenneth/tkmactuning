@@ -21,6 +21,7 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
+import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -38,8 +39,8 @@ public class StringPlugin extends AbstractPlugin<String> {
     private String value;
     private TextField textfield;
     
-    public StringPlugin(String plugin) {
-        super(plugin);
+    public StringPlugin(TKMacTuning app, String plugin) {
+        super(app, plugin);
     }
     
     @Override

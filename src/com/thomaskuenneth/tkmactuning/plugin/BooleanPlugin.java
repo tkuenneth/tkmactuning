@@ -20,6 +20,7 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 
@@ -33,8 +34,8 @@ public class BooleanPlugin extends AbstractPlugin<Boolean> {
     private Boolean value;
     private CheckBox checkbox;
 
-    public BooleanPlugin(String pluginName) {
-        super(pluginName);
+    public BooleanPlugin(TKMacTuning app, String pluginName) {
+        super(app, pluginName);
     }
 
     @Override

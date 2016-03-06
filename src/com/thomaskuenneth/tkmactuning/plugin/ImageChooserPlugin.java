@@ -21,6 +21,7 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
+import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import java.io.File;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -40,8 +41,8 @@ public class ImageChooserPlugin extends StringPlugin {
 
     private ImageView imageview;
 
-    public ImageChooserPlugin(String plugin) {
-        super(plugin);
+    public ImageChooserPlugin(TKMacTuning app, String plugin) {
+        super(app, plugin);
     }
 
     @Override
