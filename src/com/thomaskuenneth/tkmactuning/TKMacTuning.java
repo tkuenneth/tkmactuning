@@ -115,6 +115,7 @@ public class TKMacTuning extends Application {
         borderPane.setTop(buttonsPane);
         borderPane.setBottom(statusbar);
         primaryStage.setScene(new Scene(borderPane, 800, 600));
+        primaryStage.setTitle(getString("application_name"));
         primaryStage.show();
     }
 
