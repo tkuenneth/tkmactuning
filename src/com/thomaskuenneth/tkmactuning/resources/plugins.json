@@ -1,0 +1,58 @@
+[
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "disableHotPlug"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "disable-shadow"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "include-date"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin",
+        "pluginName": "screencapture_type"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "AppleShowAllFiles"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "ShowHardDrivesOnDesktop"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "ShowPathbar"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "ShowStatusBar"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.ImageChooserPlugin",
+        "pluginName": "desktop_wallpaper"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.DirChooserPlugin",
+        "pluginName": "location"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "DisableInlineAttachmentViewing"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "AppStoreShowDebugMenu"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "HelpViewerDevMode"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "WarnOnEmptyTrash"
+    }
+]

@@ -42,6 +42,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * This is the main class of TKMacTuning.
@@ -73,28 +76,13 @@ public class TKMacTuning extends Application {
         // Found here: http://stackoverflow.com/a/17488304/5956451
         tabPane.getStyleClass().add("floating");
 
-        String[][] plugins = new String[][]{
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "disableHotPlug"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "disable-shadow"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "include-date"},
-            {"com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin", "screencapture_type"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "AppleShowAllFiles"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowHardDrivesOnDesktop"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowPathbar"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "ShowStatusBar"},
-            {"com.thomaskuenneth.tkmactuning.plugin.ImageChooserPlugin", "desktop_wallpaper"},
-            {"com.thomaskuenneth.tkmactuning.plugin.DirChooserPlugin", "location"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "DisableInlineAttachmentViewing"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "AppStoreShowDebugMenu"},
-            {"com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin", "HelpViewerDevMode"}
-        };
-        for (String[] data : plugins) {
-            if (data.length != 2) {
-                throw new RuntimeException("array must have two elements");
-            } else {
-                addPlugin(tabPane, data[0], data[1]);
-            }
-        }
+        // TODO: propper error handling
+        JSONTokener t = new JSONTokener(getClass().getResourceAsStream("resources/plugins.json"));
+        JSONArray a = new JSONArray(t);
+        a.forEach((Object anObject) -> {
+            JSONObject jsonObject = (JSONObject) anObject;
+            addPlugin(tabPane, jsonObject.getString("class"), jsonObject.getString("pluginName"));
+        });
 
         FlowPane buttonsPane = new FlowPane(Orientation.HORIZONTAL);
         buttonsPane.setPadding(LayoutConstants.PADDING_1);
@@ -107,7 +95,12 @@ public class TKMacTuning extends Application {
         buttonsPane.getChildren().add(buttonReread);
         final Button buttonApply = new Button(getString("apply"));
         buttonApply.setOnAction(event -> {
-            PluginManager.save();
+//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//            alert.showAndWait().ifPresent(response -> {
+//                if (response == ButtonType.OK) {
+                    PluginManager.save();
+//                }
+//            });
         });
         buttonsPane.getChildren().add(buttonApply);
 
