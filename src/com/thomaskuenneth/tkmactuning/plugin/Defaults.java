@@ -20,8 +20,8 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.ProcessUtils;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,17 +35,8 @@ public final class Defaults {
     private static final Logger LOGGER = Logger.getLogger(Defaults.class.getName());
 
     private static final String CMD = "/usr/bin/defaults";
-    private static final String CMD_KILLALL = "/usr/bin/killall";
 
     private Defaults() {
-    }
-
-    public static void killall(String applicationName) {
-        StringBuilder sbIS = new StringBuilder();
-        StringBuilder sbES = new StringBuilder();
-        ProcessBuilder pb = new ProcessBuilder(CMD_KILLALL, applicationName);
-        int result = start(pb, sbIS, sbES);
-        LOGGER.log(Level.INFO, "appName={0} -> {1}", new Object[]{applicationName, result});
     }
 
     public static void read(AbstractPlugin plugin) {
@@ -59,20 +50,11 @@ public final class Defaults {
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
         ProcessBuilder pb = new ProcessBuilder(CMD, "read", domain, key);
-        if (start(pb, sbIS, sbES) == 0) {
+        if (ProcessUtils.start(pb, sbIS, sbES) == 0) {
             result = sbIS.toString().trim();
             setValue(plugin, result);
         }
         LOGGER.log(Level.INFO, "domain={0}, key={1} -> {2}", new Object[]{domain, key, result});
-    }
-    
-    private static void setValue(AbstractPlugin plugin, String data) {
-        final Class type = plugin.getType();
-        if (String.class.equals(type)) {
-            plugin.setValue(data);
-        } else if (Boolean.class.equals(type)) {
-            plugin.setValue("1".equals(data) || "true".equalsIgnoreCase(data));
-        }
     }
 
     public static void write(AbstractPlugin plugin) {
@@ -99,35 +81,12 @@ public final class Defaults {
                 new Object[]{domain, key, type, value});
     }
 
-    public static int start(ProcessBuilder pb, StringBuilder sbIS, StringBuilder sbES) {
-        int exit = 1;
-        try {
-            Process p = pb.start();
-            InputStream is = p.getInputStream();
-            int isData;
-            InputStream es = p.getErrorStream();
-            int esData;
-            while (true) {
-                isData = is.read();
-                esData = es.read();
-                if (isData != -1) {
-                    sbIS.append(new Character((char) isData));
-                }
-                if (esData != -1) {
-                    sbES.append(new Character((char) esData));
-                }
-                if ((isData == -1) && (esData == -1)) {
-                    try {
-                        exit = p.exitValue();
-                        break;
-                    } catch (IllegalThreadStateException e) {
-                        // no logging needed... just waiting
-                    }
-                }
-            }
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "exception while reading", e);
+    private static void setValue(AbstractPlugin plugin, String data) {
+        final Class type = plugin.getType();
+        if (String.class.equals(type)) {
+            plugin.setValue(data);
+        } else if (Boolean.class.equals(type)) {
+            plugin.setValue("1".equals(data) || "true".equalsIgnoreCase(data));
         }
-        return exit;
     }
 }

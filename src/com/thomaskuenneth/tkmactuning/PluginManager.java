@@ -56,7 +56,7 @@ public class PluginManager {
             }
         });
         map.keySet().stream().forEach((String applicationName) -> {
-            Defaults.killall(applicationName);
+            ProcessUtils.killall(applicationName);
         });
     }
 

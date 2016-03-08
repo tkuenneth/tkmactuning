@@ -20,6 +20,7 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.ProcessUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,7 +46,7 @@ public class OSAScript {
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
         ProcessBuilder pb = new ProcessBuilder("/usr/bin/osascript", "-e", script);
-        int result = Defaults.start(pb, sbIS, sbES);
+        int result = ProcessUtils.start(pb, sbIS, sbES);
         if (result == 0) {
             String value = sbIS.toString().trim();
             final Class type = plugin.getType();
