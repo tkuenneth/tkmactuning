@@ -36,11 +36,11 @@ import javafx.stage.DirectoryChooser;
  * @author Thomas Kuenneth
  */
 public class DirChooserPlugin extends StringPlugin {
-    
+
     public DirChooserPlugin(TKMacTuning app, String plugin) {
         super(app, plugin);
     }
-    
+
     @Override
     public void preWriteValue() {
         String separator = getString("separator");
@@ -68,8 +68,7 @@ public class DirChooserPlugin extends StringPlugin {
             ch.setInitialDirectory(getValueAsFile());
             File f = ch.showDialog(JavaFXUtils.getWindow(event.getSource()));
             if (f != null) {
-                String newValue = f.getAbsolutePath();
-                setValue(newValue);
+                setValueFromFile(f);
                 updateNode();
             }
         });
@@ -78,14 +77,5 @@ public class DirChooserPlugin extends StringPlugin {
             hbox.getChildren().add(button);
         }
         return node;
-    }
-    
-    private File getValueAsFile() {
-        File f = null;
-        String value = getValue();
-        if (value != null) {
-            f = new File(value);
-        }
-        return f;
     }
 }

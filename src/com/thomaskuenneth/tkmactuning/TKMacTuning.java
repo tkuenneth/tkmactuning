@@ -168,7 +168,7 @@ public class TKMacTuning extends Application {
                         group = new VBox(LayoutConstants.VERTICAL_CONTROL_GAP);
                         tabPane.getProperties().put(GROUP + secondaryUICategory, group);
                         HBox headline = new HBox();
-                        headline.setStyle("-fx-border-insets: 1 0 1 0; -fx-border-color: transparent transparent -fx-text-box-border transparent; -fx-border-width: 1;");
+                        headline.setStyle("-fx-border-insets: 0 0 1 0; -fx-border-color: transparent transparent -fx-text-box-border transparent; -fx-border-width: 1;");
                         headline.getChildren().add(new Label(secondaryUICategory));
                         group.getChildren().add(headline);
                         content.getChildren().add(group);

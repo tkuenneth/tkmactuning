@@ -20,6 +20,7 @@
  */
 package com.thomaskuenneth.tkmactuning.plugin;
 
+import com.thomaskuenneth.tkmactuning.JavaFXUtils;
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import java.io.File;
@@ -28,7 +29,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 
 /**
  * This plugin provides access to string values. Important: in this plugin the
@@ -38,6 +42,8 @@ import javafx.scene.layout.HBox;
  * @author Thomas Kuenneth
  */
 public class ImageChooserPlugin extends StringPlugin {
+
+    private static final double IMAGE_SIZE = 120;
 
     private ImageView imageview;
 
@@ -53,12 +59,29 @@ public class ImageChooserPlugin extends StringPlugin {
         final Label label = new Label(getShortDescription());
         hbox.getChildren().add(label);
         imageview = new ImageView();
-        imageview.setFitWidth(100);
-        imageview.setFitHeight(100);
+        hbox.setMinHeight(IMAGE_SIZE);
+        StackPane p = new StackPane(imageview);
+        p.setAlignment(Pos.TOP_LEFT);
+        p.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            FileChooser ch = new FileChooser();
+            File dir = getValueAsFile();
+            if ((dir != null) && (!dir.isDirectory())) {
+                dir = dir.getParentFile();
+            }
+            ch.setInitialDirectory(dir);
+            File f = ch.showOpenDialog(JavaFXUtils.getWindow(imageview));
+            if (f != null) {
+                setValueFromFile(f);
+                updateNode();
+            }
+            event.consume();
+        });
+        imageview.setFitWidth(IMAGE_SIZE);
+        imageview.setFitHeight(IMAGE_SIZE);
         imageview.setSmooth(true);
         imageview.setPreserveRatio(true);
         label.setLabelFor(imageview);
-        hbox.getChildren().add(imageview);
+        hbox.getChildren().add(p);
         return hbox;
     }
 
@@ -66,7 +89,7 @@ public class ImageChooserPlugin extends StringPlugin {
     public void updateNode() {
         String value = (String) getValue();
         if (value != null) {
-            Image i = new Image(new File(value).toURI().toString(), 100, 100, true, true);
+            Image i = new Image(new File(value).toURI().toString(), IMAGE_SIZE, IMAGE_SIZE, true, true);
             imageview.setImage(i);
         }
     }

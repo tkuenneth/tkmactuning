@@ -22,6 +22,7 @@ package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
+import java.io.File;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -35,29 +36,29 @@ import javafx.scene.layout.HBox;
  * @author Thomas Kuenneth
  */
 public class StringPlugin extends AbstractPlugin<String> {
-    
+
     private String value;
     private TextField textfield;
-    
+
     public StringPlugin(TKMacTuning app, String plugin) {
         super(app, plugin);
     }
-    
+
     @Override
     public Class<String> getType() {
         return String.class;
     }
-    
+
     @Override
     public final String getValue() {
         return value;
     }
-    
+
     @Override
     public void setValue(String value) {
         this.value = value;
     }
-    
+
     @Override
     public Node createNode() {
         HBox hbox = new HBox();
@@ -77,9 +78,21 @@ public class StringPlugin extends AbstractPlugin<String> {
         hbox.getChildren().add(textfield);
         return hbox;
     }
-    
+
     @Override
     public void updateNode() {
         textfield.setText(getValue());
+    }
+
+    public final File getValueAsFile() {
+        if (value != null) {
+            return new File(value);
+        }
+        return null;
+    }
+
+    public void setValueFromFile(File f) {
+        String newValue = f.getAbsolutePath();
+        setValue(newValue);
     }
 }
