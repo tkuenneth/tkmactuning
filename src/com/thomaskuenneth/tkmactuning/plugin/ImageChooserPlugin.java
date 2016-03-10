@@ -43,7 +43,8 @@ import javafx.stage.FileChooser;
  */
 public class ImageChooserPlugin extends StringPlugin {
 
-    private static final double IMAGE_SIZE = 120;
+    private static final double IMAGE_WIDTH = 120;
+    private static final double IMAGE_HEIGHT = 100;
 
     private ImageView imageview;
 
@@ -59,7 +60,7 @@ public class ImageChooserPlugin extends StringPlugin {
         final Label label = new Label(getShortDescription());
         hbox.getChildren().add(label);
         imageview = new ImageView();
-        hbox.setMinHeight(IMAGE_SIZE);
+        hbox.setMinHeight(IMAGE_HEIGHT);
         StackPane p = new StackPane(imageview);
         p.setAlignment(Pos.TOP_LEFT);
         p.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
@@ -76,8 +77,8 @@ public class ImageChooserPlugin extends StringPlugin {
             }
             event.consume();
         });
-        imageview.setFitWidth(IMAGE_SIZE);
-        imageview.setFitHeight(IMAGE_SIZE);
+        imageview.setFitWidth(IMAGE_WIDTH);
+        imageview.setFitHeight(IMAGE_HEIGHT);
         imageview.setSmooth(true);
         imageview.setPreserveRatio(true);
         label.setLabelFor(imageview);
@@ -89,7 +90,7 @@ public class ImageChooserPlugin extends StringPlugin {
     public void updateNode() {
         String value = (String) getValue();
         if (value != null) {
-            Image i = new Image(new File(value).toURI().toString(), IMAGE_SIZE, IMAGE_SIZE, true, true);
+            Image i = new Image(new File(value).toURI().toString(), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
             imageview.setImage(i);
         }
     }
