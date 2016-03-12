@@ -54,5 +54,9 @@
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
         "pluginName": "WarnOnEmptyTrash"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "_FXShowPosixPathInTitle"
     }
 ]
