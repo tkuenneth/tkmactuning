@@ -21,7 +21,6 @@
 package com.thomaskuenneth.tkmactuning;
 
 import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
-import com.thomaskuenneth.tkmactuning.plugin.Defaults;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +48,7 @@ public class PluginManager {
             final Object lastReadOrWritten = plugin.getLastReadOrWritten();
             if ((lastReadOrWritten == null) || (!lastReadOrWritten.equals(plugin.getValue()))) {
                 String applicationName = plugin.getApplicationName();
-                if (!map.containsKey(applicationName)) {
+                if ((!map.containsKey(applicationName)) && plugin.isNeedsKillAll()) {
                     map.put(applicationName, true);
                 }
                 plugin.writeValue();

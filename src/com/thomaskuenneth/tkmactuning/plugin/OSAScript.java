@@ -40,9 +40,17 @@ public class OSAScript {
      * @param plugin the plugin
      */
     public static void read(AbstractPlugin plugin) {
+        doit(plugin, "read");
+    }
+
+    public static void write(AbstractPlugin plugin) {
+        doit(plugin, "write");
+    }
+
+    private static void doit(AbstractPlugin plugin, String operation) {
+        String cmd = String.format(plugin.getString(operation), plugin.getValue());
         String script = String.format("tell application \"%s\" to %s",
-                plugin.getApplicationName(),
-                plugin.getString("read"));
+                plugin.getApplicationName(), cmd);
         StringBuilder sbIS = new StringBuilder();
         StringBuilder sbES = new StringBuilder();
         ProcessBuilder pb = new ProcessBuilder("/usr/bin/osascript", "-e", script);

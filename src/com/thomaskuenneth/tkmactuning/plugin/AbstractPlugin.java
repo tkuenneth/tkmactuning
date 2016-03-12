@@ -154,6 +154,7 @@ public abstract class AbstractPlugin<T> {
                     Defaults.write(this);
                     break;
                 case VALUEPROVIDER_OSASCRIPT:
+                    OSAScript.write(this);
                     break;
             }
         }
@@ -187,6 +188,18 @@ public abstract class AbstractPlugin<T> {
      * This method is called when the plugin should update its ui.
      */
     public abstract void updateNode();
+
+    /**
+     * Returns the property needsKillAll. If the property is not set, true is
+     * returned (it is then assumed that a plugin needs to have killall
+     * invoked).
+     *
+     * @return the property needsKillAll
+     */
+    public final boolean isNeedsKillAll() {
+        String s = getString("needsKillAll");
+        return !((s != null) && "false".equalsIgnoreCase(s));
+    }
 
     final String getString(String key) {
         String result = app.getString(pluginName + "." + key);

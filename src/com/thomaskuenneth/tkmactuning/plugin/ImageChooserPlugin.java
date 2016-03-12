@@ -26,10 +26,10 @@ import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import java.io.File;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -60,10 +60,8 @@ public class ImageChooserPlugin extends StringPlugin {
         final Label label = new Label(getShortDescription());
         hbox.getChildren().add(label);
         imageview = new ImageView();
-        hbox.setMinHeight(IMAGE_HEIGHT);
-        StackPane p = new StackPane(imageview);
-        p.setAlignment(Pos.TOP_LEFT);
-        p.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+        Button button = new Button("", imageview);
+        button.setOnAction(event -> {
             FileChooser ch = new FileChooser();
             File dir = getValueAsFile();
             if ((dir != null) && (!dir.isDirectory())) {
@@ -75,13 +73,9 @@ public class ImageChooserPlugin extends StringPlugin {
                 setValueFromFile(f);
                 updateNode();
             }
-            event.consume();
         });
-        imageview.setFitWidth(IMAGE_WIDTH);
-        imageview.setFitHeight(IMAGE_HEIGHT);
-        imageview.setSmooth(true);
-        imageview.setPreserveRatio(true);
-        label.setLabelFor(imageview);
+        label.setLabelFor(button);
+        StackPane p = new StackPane(button);
         hbox.getChildren().add(p);
         return hbox;
     }
@@ -89,6 +83,7 @@ public class ImageChooserPlugin extends StringPlugin {
     @Override
     public void updateNode() {
         String value = (String) getValue();
+        // TODO: if null, use a default image
         if (value != null) {
             Image i = new Image(new File(value).toURI().toString(), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
             imageview.setImage(i);
