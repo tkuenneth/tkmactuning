@@ -62,5 +62,9 @@
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
         "pluginName": "ShowSidebarInTopSites"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "Quit_When_Finished"
     }
 ]
