@@ -70,6 +70,10 @@ public final class Defaults {
             type = "-bool";
             value = Boolean.TRUE.equals(plugin.getValue()) ? "TRUE" : "FALSE";
         }
+        String overrideType = plugin.getString("overrideType");
+        if (overrideType != null) {
+            type = overrideType;
+        }
         ProcessBuilder pb = new ProcessBuilder(CMD, "write", domain, key, type, value);
         try {
             Process process = pb.start();

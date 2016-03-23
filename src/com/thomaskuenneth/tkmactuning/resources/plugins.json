@@ -66,5 +66,9 @@
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
         "pluginName": "Quit_When_Finished"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin",
+        "pluginName": "schedulefrequency"
     }
 ]

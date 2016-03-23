@@ -23,6 +23,8 @@ package com.thomaskuenneth.tkmactuning.plugin;
 import com.thomaskuenneth.tkmactuning.LayoutConstants;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -38,6 +40,7 @@ import javafx.scene.layout.HBox;
  */
 public class StringChooserPlugin extends StringPlugin {
 
+    private Map<String, String> kvp;
     private ComboBox combobox;
 
     public StringChooserPlugin(TKMacTuning app, String plugin) {
@@ -53,21 +56,32 @@ public class StringChooserPlugin extends StringPlugin {
         String values = getString("values");
         if (values != null) {
             String[] possibleValues = values.split("\\|");
-            for (int i = 0; i < possibleValues.length; i++) {
-                possibleValues[i] = possibleValues[i].trim();
+            int i = 0;
+            for (String key : possibleValues) {
+                key = key.trim();
+                int pos;
+                if (((pos = key.indexOf("=")) > 0) && ((pos + 1) < key.length())) {
+                    String value = key.substring(pos + 1);
+                    key = key.substring(0, pos);
+                    kvp.put(key, value);
+                } else {
+                    kvp.put(key, key);
+                }
+                possibleValues[i++] = key;
             }
             return possibleValues;
         }
-        return null;
+        return new String[]{};
     }
 
     @Override
     public Node createNode() {
+        kvp =  new HashMap<>();
         String[] possibleValues = getValues();
         combobox = new ComboBox();
         combobox.getItems().addAll(Arrays.asList(possibleValues));
         combobox.setOnAction(event -> {
-            setValue((String) combobox.getValue());
+            setValue((String) kvp.get((String) combobox.getValue()));
         });
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.BASELINE_LEFT);
@@ -81,6 +95,11 @@ public class StringChooserPlugin extends StringPlugin {
 
     @Override
     public void updateNode() {
-        combobox.setValue(getValue());
+        String value = getValue();
+        kvp.keySet().forEach(v -> {
+            if (kvp.get(v).equals(value)) {
+                combobox.setValue(v);
+            }
+        });
     }
 }

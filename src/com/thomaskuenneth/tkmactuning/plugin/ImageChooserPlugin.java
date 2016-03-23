@@ -61,6 +61,7 @@ public class ImageChooserPlugin extends StringPlugin {
         hbox.getChildren().add(label);
         imageview = new ImageView();
         Button button = new Button("", imageview);
+        button.setBackground(null);
         button.setOnAction(event -> {
             FileChooser ch = new FileChooser();
             File dir = getValueAsFile();
