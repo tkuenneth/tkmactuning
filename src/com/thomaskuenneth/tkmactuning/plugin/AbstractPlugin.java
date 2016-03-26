@@ -129,7 +129,8 @@ public abstract class AbstractPlugin<T> {
      * provider. Afterwards the ui is updated by calling
      * <code>updateNode()</code>.
      *
-     * @param done invoked after the value has been read; may be null
+     * @param done invoked on the JavaFX Application Thread after the value has
+     * been read; may be null
      */
     public final void readValue(Runnable done) {
         Task<Void> t = new Task<Void>() {

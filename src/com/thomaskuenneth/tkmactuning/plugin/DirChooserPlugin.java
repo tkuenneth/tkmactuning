@@ -56,7 +56,6 @@ public class DirChooserPlugin extends StringPlugin {
         if (dir != null) {
             dir.mkdirs();
         }
-        app.getStatusBar().setMainText(dir.getAbsolutePath());
     }
 
     @Override

@@ -90,7 +90,7 @@ public class TKMacTuning extends Application {
         buttonsPane.setAlignment(Pos.BASELINE_LEFT);
         final Button buttonReread = new Button(getString("reread"));
         buttonReread.setOnAction(event -> {
-            PluginManager.reread();
+            PluginManager.reread(this);
         });
         buttonsPane.getChildren().add(buttonReread);
         final Button buttonApply = new Button(getString("apply"));
@@ -110,6 +110,8 @@ public class TKMacTuning extends Application {
         borderPane.setBottom(statusbar);
         primaryStage.setScene(new Scene(borderPane, 800, 600));
         primaryStage.setTitle(getString("application_name"));
+        
+        ready();
         primaryStage.show();
     }
 
@@ -128,6 +130,13 @@ public class TKMacTuning extends Application {
 
     public StatusBar getStatusBar() {
         return statusbar;
+    }
+
+    /**
+     * This convenience method just puts the text Ready in the status bar.
+     */
+    public void ready() {
+        statusbar.setMainText(getString("ready"));
     }
 
     /**

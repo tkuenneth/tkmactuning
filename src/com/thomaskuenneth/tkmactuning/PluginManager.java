@@ -24,6 +24,9 @@ import com.thomaskuenneth.tkmactuning.plugin.AbstractPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  * This class manages plugins.
@@ -32,6 +35,8 @@ import java.util.List;
  */
 public class PluginManager {
 
+    private static final Logger LOGGER = Logger.getLogger(PluginManager.class.getName());
+    
     private static final List<AbstractPlugin> L = new ArrayList<>();
 
     public static void register(AbstractPlugin plugin) {
@@ -59,22 +64,51 @@ public class PluginManager {
                 plugin.writeValue(done);
             }
         });
-        Thread t = new Thread(() -> {
-            while (count.value() > 0) {
-            }
+        waitUntilZero(count, () -> {
             map.keySet().stream().forEach((String applicationName) -> {
                 ProcessUtils.killall(applicationName);
             });
         });
-        t.start();
     }
 
     /**
      * Rereads the values and updates the ui.
+     *
+     * @param app app instance
      */
-    public static void reread() {
+    public static void reread(TKMacTuning app) {
+        final AtomicCounter c = new AtomicCounter(L.size());
         L.stream().forEach((plugin) -> {
-            plugin.readValue(null);
+            plugin.readValue(() -> {
+                app.getStatusBar().setMainText(String.format(app.getString("msg_reread"),
+                        plugin.getShortDescription()));
+                c.decrement();
+            }
+            );
         });
+        waitUntilZero(c, () -> {
+            app.ready();
+        });
+    }
+    
+    /**
+     * Waits until a counter reaches zero and then runs code on the JavaFX
+     * Application Thread at some unspecified time in the future
+     *
+     * @param count counter
+     * @param r code to run on the JavaFX Application Thread
+     */
+    private static void waitUntilZero(AtomicCounter count, Runnable r) {
+        Thread t = new Thread(() -> {
+            while (count.value() > 0) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    LOGGER.log(Level.WARNING, "waitUntilZero()", ex);
+                }
+            }
+            Platform.runLater(r);
+        });
+        t.start();
     }
 }
