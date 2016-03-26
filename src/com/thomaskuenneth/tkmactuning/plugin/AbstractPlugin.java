@@ -22,6 +22,8 @@ package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.PluginManager;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.Node;
 
 /**
@@ -66,7 +68,7 @@ public abstract class AbstractPlugin<T> {
 
     private void initialize() {
         node = createNode();
-        readValue();
+        readValue(null);
         PluginManager.register(this);
     }
 
@@ -126,39 +128,71 @@ public abstract class AbstractPlugin<T> {
      * Reads the value from an external source using the configured value
      * provider. Afterwards the ui is updated by calling
      * <code>updateNode()</code>.
+     *
+     * @param done invoked after the value has been read; may be null
      */
-    public final void readValue() {
-        if (null != valueProvider) {
-            switch (valueProvider) {
-                case VALUEPROVIDER_DEFAULTS:
-                    Defaults.read(this);
-                    break;
-                case VALUEPROVIDER_OSASCRIPT:
-                    OSAScript.read(this);
-                    break;
+    public final void readValue(Runnable done) {
+        Task<Void> t = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                if (null != valueProvider) {
+                    switch (valueProvider) {
+                        case VALUEPROVIDER_DEFAULTS:
+                            Defaults.read(AbstractPlugin.this);
+                            break;
+                        case VALUEPROVIDER_OSASCRIPT:
+                            OSAScript.read(AbstractPlugin.this);
+                            break;
+                    }
+                }
+                lastReadOrWritten = AbstractPlugin.this.getValue();
+                Platform.runLater(() -> {
+                    updateNode();
+                });
+                if (done != null) {
+                    Platform.runLater(done);
+                }
+                return null;
             }
-        }
-        lastReadOrWritten = getValue();
-        updateNode();
+        };
+        Thread th = new Thread(t);
+        th.setDaemon(true);
+        th.start();
     }
 
     /**
      * Writes the value to an external source using the configured value
      * provider.
+     *
+     * @param done invoked after the value has been written; may be null
      */
-    public final void writeValue() {
+    public final void writeValue(Runnable done) {
         preWriteValue();
-        if (null != valueProvider) {
-            switch (valueProvider) {
-                case VALUEPROVIDER_DEFAULTS:
-                    Defaults.write(this);
-                    break;
-                case VALUEPROVIDER_OSASCRIPT:
-                    OSAScript.write(this);
-                    break;
+        Task<Void> t = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                if (null != valueProvider) {
+                    switch (valueProvider) {
+                        case VALUEPROVIDER_DEFAULTS:
+                            Defaults.write(AbstractPlugin.this);
+                            break;
+                        case VALUEPROVIDER_OSASCRIPT:
+                            OSAScript.write(AbstractPlugin.this);
+                            break;
+                    }
+                }
+                lastReadOrWritten = AbstractPlugin.this.getValue();
+                if (done != null) {
+                    Platform.runLater(done);
+                }
+                return null;
             }
-        }
-        lastReadOrWritten = getValue();
+        };
+        Thread th = new Thread(t);
+        th.setDaemon(true);
+        th.start();
     }
     
     /**

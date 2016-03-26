@@ -44,6 +44,10 @@ public class PluginManager {
      */
     public static void save() {
         HashMap<String, Boolean> map = new HashMap<>();
+        final AtomicCounter count = new AtomicCounter();
+        final Runnable done = () -> {
+            count.decrement();
+        };
         L.stream().forEach((plugin) -> {
             final Object lastReadOrWritten = plugin.getLastReadOrWritten();
             if ((lastReadOrWritten == null) || (!lastReadOrWritten.equals(plugin.getValue()))) {
@@ -51,12 +55,18 @@ public class PluginManager {
                 if ((!map.containsKey(applicationName)) && plugin.isNeedsKillAll()) {
                     map.put(applicationName, true);
                 }
-                plugin.writeValue();
+                count.increment();
+                plugin.writeValue(done);
             }
         });
-        map.keySet().stream().forEach((String applicationName) -> {
-            ProcessUtils.killall(applicationName);
+        Thread t = new Thread(() -> {
+            while (count.value() > 0) {
+            }
+            map.keySet().stream().forEach((String applicationName) -> {
+                ProcessUtils.killall(applicationName);
+            });
         });
+        t.start();
     }
 
     /**
@@ -64,7 +74,7 @@ public class PluginManager {
      */
     public static void reread() {
         L.stream().forEach((plugin) -> {
-            plugin.readValue();
+            plugin.readValue(null);
         });
     }
 }
