@@ -26,7 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 /**
  * This class manages plugins.
@@ -67,12 +72,28 @@ public class PluginManager {
                 });
             }
         });
-        waitUntilZero(count, () -> {
-            map.keySet().stream().forEach((String applicationName) -> {
-                ProcessUtils.killall(applicationName);
-                app.ready();
+        if (map.size() > 0) {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.getButtonTypes().add(ButtonType.YES);
+            alert.getButtonTypes().add(ButtonType.NO);
+            Window owner = JavaFXUtils.getWindow(app.getStatusBar());
+            alert.initOwner(owner);
+            String apps = map.keySet().stream()
+                    .collect(Collectors.joining(", "));
+            String txt = String.format(app.getString("msg_terminate"), apps);
+            alert.setContentText(txt);
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    waitUntilZero(count, () -> {
+                        map.keySet().stream().forEach((String applicationName) -> {
+                            ProcessUtils.killall(applicationName);
+                            app.ready();
+                        });
+                    });
+                }
             });
-        });
+        }
     }
 
     /**

@@ -95,12 +95,7 @@ public class TKMacTuning extends Application {
         buttonsPane.getChildren().add(buttonReread);
         final Button buttonApply = new Button(getString("apply"));
         buttonApply.setOnAction(event -> {
-//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//            alert.showAndWait().ifPresent(response -> {
-//                if (response == ButtonType.OK) {
             PluginManager.save(this);
-//                }
-//            });
         });
         buttonsPane.getChildren().add(buttonApply);
 
