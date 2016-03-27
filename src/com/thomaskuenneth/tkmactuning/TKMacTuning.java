@@ -98,7 +98,7 @@ public class TKMacTuning extends Application {
 //            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 //            alert.showAndWait().ifPresent(response -> {
 //                if (response == ButtonType.OK) {
-            PluginManager.save();
+            PluginManager.save(this);
 //                }
 //            });
         });

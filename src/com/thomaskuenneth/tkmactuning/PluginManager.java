@@ -46,13 +46,12 @@ public class PluginManager {
     /**
      * If the current plugin value differs from the last read value, save the
      * new value and kill the corresponding app.
+     *
+     * @param app app instance
      */
-    public static void save() {
+    public static void save(TKMacTuning app) {
         HashMap<String, Boolean> map = new HashMap<>();
         final AtomicCounter count = new AtomicCounter();
-        final Runnable done = () -> {
-            count.decrement();
-        };
         L.stream().forEach((plugin) -> {
             final Object lastReadOrWritten = plugin.getLastReadOrWritten();
             if ((lastReadOrWritten == null) || (!lastReadOrWritten.equals(plugin.getValue()))) {
@@ -61,12 +60,17 @@ public class PluginManager {
                     map.put(applicationName, true);
                 }
                 count.increment();
-                plugin.writeValue(done);
+                plugin.writeValue(() -> {
+                    app.getStatusBar().setMainText(String.format(app.getString("msg_write"),
+                            plugin.getShortDescription()));
+                    count.decrement();
+                });
             }
         });
         waitUntilZero(count, () -> {
             map.keySet().stream().forEach((String applicationName) -> {
                 ProcessUtils.killall(applicationName);
+                app.ready();
             });
         });
     }
