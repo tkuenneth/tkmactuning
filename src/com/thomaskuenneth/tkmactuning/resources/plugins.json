@@ -70,5 +70,9 @@
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.StringChooserPlugin",
         "pluginName": "schedulefrequency"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "FXEnableExtensionChangeWarning"
     }
 ]
