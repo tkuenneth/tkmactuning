@@ -81,6 +81,6 @@
     },
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.ActionPlugin",
-        "pluginName": "space-tile"
+        "pluginName": "spacer-tile"
     }
 ]
