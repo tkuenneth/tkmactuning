@@ -82,5 +82,9 @@
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.ActionPlugin",
         "pluginName": "spacer-tile"
+    },
+        {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "static-only"
     }
 ]
