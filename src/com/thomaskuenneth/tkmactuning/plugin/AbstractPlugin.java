@@ -231,13 +231,13 @@ public abstract class AbstractPlugin<T> {
     /**
      * Returns the property needsKillAll. If the property is not set, true is
      * returned (it is then assumed that a plugin needs to have killall
-     * invoked).
+     * invoked). If the plugin is an action plugin, false is returned.
      *
      * @return the property needsKillAll
      */
     public final boolean isNeedsKillAll() {
         String s = getString("needsKillAll");
-        return !((s != null) && "false".equalsIgnoreCase(s));
+        return !isAction() && !((s != null) && "false".equalsIgnoreCase(s));
     }
     
     /**

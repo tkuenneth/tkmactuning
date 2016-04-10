@@ -60,18 +60,16 @@ public class PluginManager {
         L.stream().forEach((plugin) -> {
             final Object lastReadOrWritten = plugin.getLastReadOrWritten();
             if ((lastReadOrWritten == null) || (!lastReadOrWritten.equals(plugin.getValue()))) {
-                if (!plugin.isAction()) {
-                    String applicationName = plugin.getApplicationName();
-                    if ((!map.containsKey(applicationName)) && plugin.isNeedsKillAll()) {
-                        map.put(applicationName, true);
-                    }
-                    count.increment();
-                    plugin.writeValue(() -> {
-                        app.getStatusBar().setMainText(String.format(app.getString("msg_write"),
-                                plugin.getShortDescription()));
-                        count.decrement();
-                    });
+                String applicationName = plugin.getApplicationName();
+                if ((!map.containsKey(applicationName)) && plugin.isNeedsKillAll()) {
+                    map.put(applicationName, true);
                 }
+                count.increment();
+                plugin.writeValue(() -> {
+                    app.getStatusBar().setMainText(String.format(app.getString("msg_write"),
+                            plugin.getShortDescription()));
+                    count.decrement();
+                });
             }
         });
         if (map.size() > 0) {
@@ -106,16 +104,12 @@ public class PluginManager {
     public static void reread(TKMacTuning app) {
         final AtomicCounter c = new AtomicCounter(L.size());
         L.stream().forEach((plugin) -> {
-            if (!plugin.isAction()) {
-                plugin.readValue(() -> {
-                    app.getStatusBar().setMainText(String.format(app.getString("msg_reread"),
-                            plugin.getShortDescription()));
-                    c.decrement();
-                }
-                );
-            } else {
+            plugin.readValue(() -> {
+                app.getStatusBar().setMainText(String.format(app.getString("msg_reread"),
+                        plugin.getShortDescription()));
                 c.decrement();
             }
+            );
         });
         waitUntilZero(c, () -> {
             app.ready();
