@@ -21,6 +21,7 @@
 package com.thomaskuenneth.tkmactuning.plugin;
 
 import com.thomaskuenneth.tkmactuning.PluginManager;
+import com.thomaskuenneth.tkmactuning.ProcessUtils;
 import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -164,7 +165,7 @@ public abstract class AbstractPlugin<T> {
 
     /**
      * Writes the value to an external source using the configured value
-     * provider.
+     * provider. If the plugin is an action, asassa
      *
      * @param done invoked after the value has been written; may be null
      */
@@ -182,6 +183,9 @@ public abstract class AbstractPlugin<T> {
                         case VALUEPROVIDER_OSASCRIPT:
                             OSAScript.write(AbstractPlugin.this);
                             break;
+                    }
+                    if (isAction()) {
+                        ProcessUtils.killall(getApplicationName());
                     }
                 }
                 lastReadOrWritten = AbstractPlugin.this.getValue();
@@ -234,6 +238,19 @@ public abstract class AbstractPlugin<T> {
     public final boolean isNeedsKillAll() {
         String s = getString("needsKillAll");
         return !((s != null) && "false".equalsIgnoreCase(s));
+    }
+    
+    /**
+     * Returns the property isAction. If the property is not set, false is
+     * returned (it is then assumed that a plugin is not an action). If a plugin
+     * is an action, readValue() is never called, and writeValue() is called
+     * upon activation of the action.
+     *
+     * @return the property isAction
+     */
+    public final boolean isAction() {
+        String s = getString("isAction");
+        return ((s != null) && "true".equalsIgnoreCase(s));
     }
 
     final String getString(String key) {
