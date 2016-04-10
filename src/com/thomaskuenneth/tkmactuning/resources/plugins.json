@@ -74,5 +74,13 @@
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
         "pluginName": "FXEnableExtensionChangeWarning"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.ActionPlugin",
+        "pluginName": "recents-tile"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.ActionPlugin",
+        "pluginName": "space-tile"
     }
 ]
