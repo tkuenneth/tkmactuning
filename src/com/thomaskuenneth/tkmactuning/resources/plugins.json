@@ -90,5 +90,9 @@
     {
         "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
         "pluginName": "QuitMenuItem"
+    },
+    {
+        "class": "com.thomaskuenneth.tkmactuning.plugin.BooleanPlugin",
+        "pluginName": "showhidden"
     }
 ]
