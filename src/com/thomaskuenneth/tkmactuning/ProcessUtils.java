@@ -27,6 +27,10 @@ import java.util.logging.Logger;
 
 /**
  * This class contains utility methods to start external commandline tools.
+ * Currently we have no secure way of running administrative commands (sudo
+ * ...). There once was a great lib called AuthKit by Greg Guerin that used JNI
+ * to access Mac OS X Authorization Services. See
+ * http://stackoverflow.com/a/7408764/5956451 for more info.
  *
  * @author Thomas Kuenneth
  */
