@@ -26,6 +26,7 @@ import com.thomaskuenneth.tkmactuning.TKMacTuning;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 
 /**
  * This is the abstract base class for TKMacTuning-plugins. Plugins provide
@@ -69,6 +70,11 @@ public abstract class AbstractPlugin<T> {
 
     private void initialize() {
         node = createNode();
+        String tooltipText = getString("tooltip");
+        if (tooltipText != null) {
+            Tooltip t = new Tooltip(tooltipText);
+            Tooltip.install(node, t);
+        }
         readValue(null);
         PluginManager.register(this);
     }
