@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   sodipodi:docname="TKMacTuning.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="317.14286"
+     inkscape:cy="691.82433"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1248"
+     inkscape:window-height="794"
+     inkscape:window-x="67"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3952"
+       inkscape:export-xdpi="81.269997"
+       inkscape:export-ydpi="81.269997">
+      <path
+         style="fill:#dedede;stroke:#1e1e1e;stroke-width:16.1093;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 124.29885,39.425727 0.64324,0.643279 z m 0.64324,0 0.64323,0.643279 z m 0.64323,0 0.64323,0.643279 z m 0.64323,0 0.64323,0.643279 z m 0.64323,0 0.64324,0.643279 z m 38.59388,20.584839 c -7.83263,5.517567 -13.00099,15.341426 -21.22663,20.171402 -8.5138,4.9989 -17.84067,-5.335462 -15.58293,-13.738641 0.75517,-2.811117 3.96166,-5.103048 5.93446,-7.076039 4.94773,-4.948599 10.76061,-9.71167 14.79432,-15.438627 -22.33299,-9.160524 -48.57297,-1.410396 -55.685824,23.801215 -1.34178,4.75722 -1.99016,9.880534 -1.28647,14.795358 0.35957,2.511026 2.31306,6.947051 1.05748,9.278871 -2.38896,4.43539 -8.07087,8.395395 -11.62447,11.949235 l -25.729253,25.73104 -8.362007,8.36259 c -9.719422,9.7199 -32.842228,26.60011 -17.173669,41.51189 15.32367,14.58372 31.870538,-8.60702 41.616459,-18.35394 l 8.362,-8.36259 25.086014,-25.08778 c 3.57895,-3.57918 7.54768,-9.24258 12.0381,-11.62528 2.32527,-1.2338 6.69023,0.69924 9.18854,1.05754 4.91429,0.70375 10.03762,0.056 14.79432,-1.28654 25.2166,-7.11721 32.95596,-33.363902 23.79956,-55.689704 z"
+         id="path1814" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:12.7px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="-83.784538"
+         y="152.08017"
+         id="text3947"
+         transform="rotate(-44.832575)"><tspan
+           sodipodi:role="line"
+           id="tspan3945"
+           x="-83.784538"
+           y="152.08017"
+           style="font-size:12.7px;stroke-width:0.264583">TKMacTuning</tspan></text>
+    </g>
+  </g>
+</svg>
